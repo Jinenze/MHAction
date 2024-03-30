@@ -1,0 +1,42 @@
+{
+	"schemaVersion": 1,
+	"id": "examplemod",
+	"version": "${version}",
+	"name": "Template Mod",
+	"description": "123456",
+	"authors": [
+		"Jinenze"
+	],
+	"contact": {
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/examplemod/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.example.examplemod.ExampleMod"
+		],
+		"client": [
+			"com.example.examplemod.client.ExampleModClient"
+		],
+		"fabric-datagen": [
+			"com.example.examplemod.ExampleModDataGenerator"
+		]
+	},
+	"mixins": [
+		"template-mod.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.21",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*",
+		"fabric-key-binding-api-v1": "*",
+		"fabric-networking-api-v1": "*",
+		"fabric-lifecycle-events-v1": "*"
+	},
+	"suggests": {
+
+	}
+}
