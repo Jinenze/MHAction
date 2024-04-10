@@ -3,25 +3,17 @@ package com.example.examplemod.client.action;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.util.Identifier;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.model.GeoModel;
 
 @Environment(EnvType.CLIENT)
-public class Dodge extends GeoModel {
+public class Dodge extends AbstractAction {
+    public static final Dodge INSTANCE = new Dodge(1,0,1);
 
-    @Override
-    public Identifier getModelResource(GeoAnimatable animatable) {
-        return null;
+     private Dodge(int stage1, int stage2, int stage3, AbstractAction... availableAction) {
+        super(stage1, stage2, stage3, availableAction);
     }
 
     @Override
-    public Identifier getTextureResource(GeoAnimatable animatable) {
-        return null;
-    }
+    void run() {
 
-    @Override
-    public Identifier getAnimationResource(GeoAnimatable animatable) {
-        return null;
     }
 }
