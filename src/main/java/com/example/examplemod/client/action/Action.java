@@ -20,7 +20,7 @@ public class Action {
     public static float movementForward;
     public static float movementSideways;
 
-    public static void register(KeyBinding key, int cooldown, int inputTime, int stopTime, Action action) {
+    public static void register(KeyBinding key, int cooldown, int inputTime, int stopTime, AbstractAction action) {
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
             if (client.player != null && key.wasPressed() && Action.actionStage == 1 && client.player.getMainHandStack().getItem() instanceof SwordItem) {
                 actionRunning = true;
@@ -33,7 +33,7 @@ public class Action {
         });
     }
 
-    public static void register(KeyBinding key, int cooldown, int inputTime, int stopTime, Action action, ArrayList<KeyBinding> keyList) {
+    public static void register(KeyBinding key, int cooldown, int inputTime, int stopTime, Action action, KeyBinding... keyList) {
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
             if (client.player != null && key.wasPressed() && Action.actionStage == 1 && client.player.getMainHandStack().getItem() instanceof SwordItem) {
                 Action.actionStage = 0;
@@ -74,16 +74,12 @@ public class Action {
         });
     }
 
-    public void run(ArrayList<KeyBinding> keyList) {
+    public void run(KeyBinding... keyList) {
         for (KeyBinding keyBind : keyList) {
             if (keyBind.isPressed()) {
                 action(keyBind);
             }
         }
-    }
-
-    public void run() {
-
     }
 
     public void action(KeyBinding keyBind) {

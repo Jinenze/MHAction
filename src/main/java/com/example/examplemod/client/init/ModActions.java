@@ -6,6 +6,11 @@ import com.example.examplemod.client.action.Dodge;
 public class ModActions {
     public static void register() {
         Action.actionTick();
-        Action.register(ModKeyBinds.DODGE_KEY, 1, 1, 1, new Dodge());
+        Action.register(ModKeyBinds.DODGE_KEY, 1, 1, 1,new Action(){
+            @Override
+            public void run() {
+                super.run();
+            }
+        });
     }
 }
