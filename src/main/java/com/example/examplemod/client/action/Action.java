@@ -71,6 +71,14 @@ public class Action {
         }
     }
 
+    public static void doAction(KeyBinding lastKey, KeyBinding key) {
+        if (lastKey == null || lastKey == key){
+            return;
+        }else if(){
+
+        }
+    }
+
     public void run(KeyBinding... keyList) {
         for (KeyBinding keyBind : keyList) {
             if (keyBind.isPressed()) {
@@ -79,7 +87,7 @@ public class Action {
         }
     }
 
-    public void setAction(AbstractAction action) {
+    public static void setAction(AbstractAction action) {
         if (!Action.actionRunning || Action.actionStage == 2) {
             runningAction = action;
         }
