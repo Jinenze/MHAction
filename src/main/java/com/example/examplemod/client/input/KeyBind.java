@@ -12,7 +12,6 @@ import java.util.ArrayList;
 public class KeyBind {
     private static final ArrayList<KeyBinding> keyList = new ArrayList<>();
     private static int tickCountKey;
-    private static int tickCountKeyPressed;
     @Nullable
     private static KeyBinding lastKey;
     @Nullable
@@ -24,31 +23,19 @@ public class KeyBind {
     }
 
     public static void keyBindTick() {
+        key = null;
         if (tickCountKey == 0) {
             lastKey = null;
-            key = null;
         } else {
             --tickCountKey;
         }
         for (KeyBinding k : keyList) {
             if (k.isPressed()) {
-                if (k.wasPressed()) {
-                    --tickCountKeyPressed;
-                } else {
-                    tickCountKeyPressed = 5;
-                }
-                if (tickCountKey != 3) {
-                    if (tickCountKey == 0 && lastKey == k) {
-                        k = null;
-                    }
-                    tickCountKey = 3;
-                    lastKey = k;
+                if (lastKey == null) {
+                    lastKey = key;
+                    tickCountKey = 5;
                 }
                 key = k;
-                if (tickCountKeyPressed == 0) {
-                    lastKey = null;
-                    key = null;
-                }
             }
         }
         Action.doAction(lastKey, key);

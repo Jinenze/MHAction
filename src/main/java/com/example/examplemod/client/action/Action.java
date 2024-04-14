@@ -77,13 +77,18 @@ public class Action {
             stopTime = action.getStage3();
             actionRunning = true;
             action.run();
-        } else if (lastAction.isAvailable(action) && KeyBind.getTickCountKey() != 0) {
-            runningAction = action;
-            cooldown = action.getStage1();
-            inputTime = action.getStage2();
-            stopTime = action.getStage3();
-            actionRunning = true;
-            action.run();
+        } else if (lastAction != null) {
+            if (!lastAction.isAvailable(action)) {
+                return;
+            }
+            if (KeyBind.getTickCountKey() != 0) {
+                runningAction = action;
+                cooldown = action.getStage1();
+                inputTime = action.getStage2();
+                stopTime = action.getStage3();
+                actionRunning = true;
+                action.run();
+            }
         }
     }
 
