@@ -2,47 +2,21 @@ package com.example.examplemod.client.action;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.item.SwordItem;
+
+import java.util.ArrayList;
 
 @Environment(EnvType.CLIENT)
 public class Action {
-    public static int cooldown;
-    public static int inputTime;
-
-    public static int stopTime;
-
-    public static int actionStage;
-    public static boolean actionRunning;
-    private static AbstractAction runningAction;
     public static float movementForward;
     public static float movementSideways;
-
-    public static void register(KeyBinding key, int cooldown, int inputTime, int stopTime, AbstractAction action) {
-        ClientTickEvents.END_CLIENT_TICK.register((client) -> {
-            if (client.player != null && key.wasPressed() && Action.actionStage == 1 && client.player.getMainHandStack().getItem() instanceof SwordItem) {
-                actionRunning = true;
-                Action.actionStage = 0;
-                action.run();
-                Action.cooldown = cooldown;
-                Action.inputTime = inputTime;
-                Action.stopTime = stopTime;
-            }
-        });
-    }
-
-    public static void register(KeyBinding key, int cooldown, int inputTime, int stopTime, Action action, KeyBinding... keyList) {
-        ClientTickEvents.END_CLIENT_TICK.register((client) -> {
-            if (client.player != null && key.wasPressed() && Action.actionStage == 1 && client.player.getMainHandStack().getItem() instanceof SwordItem) {
-                Action.actionStage = 0;
-                action.run(keyList);
-                Action.cooldown = cooldown;
-                Action.inputTime = inputTime;
-                Action.stopTime = stopTime;
-            }
-        });
-    }
+    public static int cooldown;
+    private static int inputTime;
+    private static int stopTime;
+    private static int actionStage;
+    private static boolean actionRunning;
+    private static AbstractAction runningAction;
+    private static final ArrayList<AbstractAction> Actions = new ArrayList<>();
 
     public static void actionTick() {
         switch (Action.actionStage) {
@@ -72,28 +46,44 @@ public class Action {
     }
 
     public static void doAction(KeyBinding lastKey, KeyBinding key) {
-        if (lastKey == null || lastKey == key){
-            return;
-        }else if(){
-
+        KeyBinding[] k;
+        if ((lastKey == null && key != null) || lastKey == key) {
+            k = new KeyBinding[]{null, key};
+        } else {
+            k = new KeyBinding[]{lastKey, key};
         }
-    }
-
-    public void run(KeyBinding... keyList) {
-        for (KeyBinding keyBind : keyList) {
-            if (keyBind.isPressed()) {
-                action(keyBind);
+        for (AbstractAction a : Actions) {
+            if (a.getActionKey() == k) {
+                setAction(a);
             }
         }
     }
 
     public static void setAction(AbstractAction action) {
-        if (!Action.actionRunning || Action.actionStage == 2) {
+        if ((!Action.actionRunning || Action.actionStage == 2) && runningAction.isAvailable(action)) {
             runningAction = action;
+            cooldown = action.getStage1();
+            inputTime = action.getStage2();
+            stopTime = action.getStage3();
+            Action.actionRunning = true;
         }
     }
 
-    public void action(KeyBinding keyBind) {
+    public static void register(AbstractAction action, KeyBinding key, AbstractAction... availableAction) {
+        KeyBinding[] k = {null, key};
+        action.setActionKey(k);
+        action.setAvailableAction(availableAction);
+        Actions.add(action);
+    }
 
+    public static void register(AbstractAction action, KeyBinding lastKey, KeyBinding key, AbstractAction... availableAction) {
+        KeyBinding[] k = {lastKey, key};
+        action.setActionKey(k);
+        action.setAvailableAction(availableAction);
+        Actions.add(action);
+    }
+
+    public static boolean isActionRunning() {
+        return actionRunning;
     }
 }

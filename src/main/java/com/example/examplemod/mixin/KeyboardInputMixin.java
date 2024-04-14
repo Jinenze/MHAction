@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class KeyboardInputMixin extends Input {
     @Inject(method = "tick", at = @At("RETURN"))
     private void tickInject(boolean slowDown, float slowDownFactor, CallbackInfo ci) {
-        if (Action.actionRunning) {
+        if (Action.isActionRunning()) {
 //            this.pressingForward = false;
 //            this.pressingBack = false;
 //            this.pressingLeft = false;

@@ -1,7 +1,6 @@
 package com.example.examplemod.client.input;
 
 import com.example.examplemod.client.action.Action;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.option.KeyBinding;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,27 +18,25 @@ public class KeyBind {
         return key;
     }
 
-    public static void init() {
-        ClientTickEvents.END_CLIENT_TICK.register((client) -> {
-            if (tickCountKey == 0) {
-                lastKey = null;
-                key = null;
-            } else {
-                --tickCountKey;
-            }
-            for (KeyBinding k : keyList) {
-                if (k.isPressed()) {
-                    if (tickCountKey != 3) {
-                        if (tickCountKey == 0 && lastKey == k) {
-                            k = null;
-                        }
-                        tickCountKey = 3;
-                        lastKey = k;
+    public static void keyBindTick() {
+        if (tickCountKey == 0) {
+            lastKey = null;
+            key = null;
+        } else {
+            --tickCountKey;
+        }
+        for (KeyBinding k : keyList) {
+            if (k.isPressed()) {
+                if (tickCountKey != 3) {
+                    if (tickCountKey == 0 && lastKey == k) {
+                        k = null;
                     }
-                    key = k;
+                    tickCountKey = 3;
+                    lastKey = k;
                 }
+                key = k;
             }
-            Action.doAction(lastKey, key);
-        });
+        }
+        Action.doAction(lastKey, key);
     }
 }

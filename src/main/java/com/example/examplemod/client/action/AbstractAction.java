@@ -6,18 +6,16 @@ public abstract class AbstractAction {
     private final int stage1;
     private final int stage2;
     private final int stage3;
-    private final KeyBinding[] actionKey;
-    private final AbstractAction[] availableAction;
+    private KeyBinding[] actionKey;
+    private AbstractAction[] availableAction;
 
-    public AbstractAction(int stage1, int stage2, int stage3, AbstractAction[] availableAction, KeyBinding... key) {
+    public AbstractAction(int stage1, int stage2, int stage3) {
         this.stage1 = stage1;
         this.stage2 = stage2;
         this.stage3 = stage3;
-        this.actionKey = key;
-        this.availableAction = availableAction;
     }
 
-    abstract void run();
+    public abstract void run();
 
     public boolean isAvailable(AbstractAction action) {
         for (AbstractAction a : availableAction) {
@@ -44,7 +42,11 @@ public abstract class AbstractAction {
         return actionKey;
     }
 
-    public AbstractAction[] getAvailableAction() {
-        return availableAction;
+    public void setActionKey(KeyBinding[] key) {
+        actionKey = key;
+    }
+
+    public void setAvailableAction(AbstractAction[] availableAction) {
+        this.availableAction = availableAction;
     }
 }

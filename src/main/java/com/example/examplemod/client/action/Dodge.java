@@ -8,12 +8,12 @@ import net.minecraft.client.option.KeyBinding;
 @Environment(EnvType.CLIENT)
 public class Dodge extends AbstractAction {
 
-    public Dodge(int stage1, int stage2, int stage3, KeyBinding key, AbstractAction... availableAction) {
-        super(stage1, stage2, stage3, key, availableAction);
+    public Dodge(int stage1, int stage2, int stage3) {
+        super(stage1, stage2, stage3);
     }
 
     @Override
-    void run() {
+    public void run() {
 
     }
 }
