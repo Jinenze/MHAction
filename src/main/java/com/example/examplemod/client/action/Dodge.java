@@ -3,7 +3,7 @@ package com.example.examplemod.client.action;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.MinecraftClient;
 
 @Environment(EnvType.CLIENT)
 public class Dodge extends AbstractAction {
@@ -14,6 +14,8 @@ public class Dodge extends AbstractAction {
 
     @Override
     public void run() {
-
+        if (MinecraftClient.getInstance().player != null) {
+            MinecraftClient.getInstance().player.takeKnockback(1, 1, 0);
+        }
     }
 }

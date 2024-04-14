@@ -1,7 +1,10 @@
 package com.example.examplemod.client.action;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.option.KeyBinding;
 
+@Environment(EnvType.CLIENT)
 public abstract class AbstractAction {
     private final int stage1;
     private final int stage2;

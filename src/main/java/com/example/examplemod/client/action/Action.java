@@ -19,53 +19,58 @@ public class Action {
     private static final ArrayList<AbstractAction> Actions = new ArrayList<>();
 
     public static void actionTick() {
-        switch (Action.actionStage) {
+        switch (actionStage) {
             case 0:
-                if (!Action.actionRunning) {
+                if (!actionRunning) {
                     break;
                 }
-                if (Action.cooldown > 0) {
-                    --Action.cooldown;
+                if (cooldown > 0) {
+                    --cooldown;
                 } else {
-                    Action.actionStage = 1;
+                    actionStage = 1;
                 }
             case 1:
-                if (Action.inputTime > 0) {
-                    --Action.inputTime;
+                if (inputTime > 0) {
+                    --inputTime;
                 } else {
-                    Action.actionStage = 2;
+                    actionStage = 2;
                 }
             case 2:
-                if (Action.stopTime > 0) {
-                    --Action.stopTime;
+                if (stopTime > 0) {
+                    --stopTime;
                 } else {
-                    Action.actionStage = 0;
-                    Action.actionRunning = false;
+                    actionStage = 0;
+                    actionRunning = false;
+                    runningAction = null;
                 }
         }
     }
 
     public static void doAction(KeyBinding lastKey, KeyBinding key) {
-        KeyBinding[] k;
         if ((lastKey == null && key != null) || lastKey == key) {
-            k = new KeyBinding[]{null, key};
-        } else {
-            k = new KeyBinding[]{lastKey, key};
+            lastKey = null;
         }
         for (AbstractAction a : Actions) {
-            if (a.getActionKey() == k) {
+            KeyBinding[] keys = a.getActionKey();
+            if (keys[0] == lastKey && keys[1] == key) {
                 setAction(a);
             }
         }
     }
 
     public static void setAction(AbstractAction action) {
-        if ((!Action.actionRunning || Action.actionStage == 2) && runningAction.isAvailable(action)) {
+        if ((!actionRunning || actionStage == 2)) {
+            if (runningAction != null) {
+                if (!runningAction.isAvailable(action)) {
+                    return;
+                }
+            }
             runningAction = action;
             cooldown = action.getStage1();
             inputTime = action.getStage2();
             stopTime = action.getStage3();
-            Action.actionRunning = true;
+            actionRunning = true;
+            action.run();
         }
     }
 

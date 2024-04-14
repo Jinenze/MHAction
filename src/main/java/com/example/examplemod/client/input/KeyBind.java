@@ -1,11 +1,14 @@
 package com.example.examplemod.client.input;
 
 import com.example.examplemod.client.action.Action;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.option.KeyBinding;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
+@Environment(EnvType.CLIENT)
 public class KeyBind {
     private static final ArrayList<KeyBinding> keyList = new ArrayList<>();
     private static int tickCountKey;
