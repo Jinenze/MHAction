@@ -1,8 +1,10 @@
 package com.example.examplemod.client.action;
 
+import com.example.examplemod.client.input.KeyBind;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.option.KeyBinding;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -15,6 +17,9 @@ public class Action {
     private static int stopTime;
     private static int actionStage;
     private static boolean actionRunning;
+    @Nullable
+    private static AbstractAction lastAction;
+    @Nullable
     private static AbstractAction runningAction;
     private static final ArrayList<AbstractAction> Actions = new ArrayList<>();
 
@@ -62,9 +67,17 @@ public class Action {
         if ((!actionRunning || actionStage == 2)) {
             if (runningAction != null) {
                 if (!runningAction.isAvailable(action)) {
+                    lastAction = runningAction;
                     return;
                 }
             }
+            runningAction = action;
+            cooldown = action.getStage1();
+            inputTime = action.getStage2();
+            stopTime = action.getStage3();
+            actionRunning = true;
+            action.run();
+        } else if (lastAction.isAvailable(action) && KeyBind.getTickCountKey() != 0) {
             runningAction = action;
             cooldown = action.getStage1();
             inputTime = action.getStage2();

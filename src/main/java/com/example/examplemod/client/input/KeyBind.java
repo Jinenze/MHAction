@@ -12,8 +12,10 @@ import java.util.ArrayList;
 public class KeyBind {
     private static final ArrayList<KeyBinding> keyList = new ArrayList<>();
     private static int tickCountKey;
+    private static int tickCountKeyPressed;
     @Nullable
     private static KeyBinding lastKey;
+    @Nullable
     private static KeyBinding key;
 
     public static KeyBinding register(KeyBinding key) {
@@ -30,6 +32,11 @@ public class KeyBind {
         }
         for (KeyBinding k : keyList) {
             if (k.isPressed()) {
+                if (k.wasPressed()) {
+                    --tickCountKeyPressed;
+                } else {
+                    tickCountKeyPressed = 5;
+                }
                 if (tickCountKey != 3) {
                     if (tickCountKey == 0 && lastKey == k) {
                         k = null;
@@ -38,8 +45,16 @@ public class KeyBind {
                     lastKey = k;
                 }
                 key = k;
+                if (tickCountKeyPressed == 0) {
+                    lastKey = null;
+                    key = null;
+                }
             }
         }
         Action.doAction(lastKey, key);
+    }
+
+    public static int getTickCountKey() {
+        return tickCountKey;
     }
 }
