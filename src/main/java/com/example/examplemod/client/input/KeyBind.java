@@ -1,6 +1,6 @@
 package com.example.examplemod.client.input;
 
-import com.example.examplemod.client.action.Action;
+import com.example.examplemod.client.action.ActionRunner;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.option.KeyBinding;
@@ -11,11 +11,11 @@ import java.util.ArrayList;
 @Environment(EnvType.CLIENT)
 public class KeyBind {
     private static final ArrayList<KeyBinding> keyList = new ArrayList<>();
-    private static int tickCountKey;
     @Nullable
     private static KeyBinding lastKey;
     @Nullable
     private static KeyBinding key;
+    private static int tickCount;
 
     public static KeyBinding register(KeyBinding key) {
         keyList.add(key);
@@ -23,25 +23,50 @@ public class KeyBind {
     }
 
     public static void keyBindTick() {
-        key = null;
-        if (tickCountKey == 0) {
-            lastKey = null;
-        } else {
-            --tickCountKey;
-        }
         for (KeyBinding k : keyList) {
             if (k.isPressed()) {
-                if (lastKey == null) {
-                    lastKey = key;
-                    tickCountKey = 5;
+                if (k != lastKey && tickCount <= 0) {
+                    tickCount = 3;
                 }
-                key = k;
+                if (lastKey == null) {
+                    lastKey = k;
+                } else if (k != lastKey) {
+                    key = k;
+                }
             }
         }
-        Action.doAction(lastKey, key);
+        if (tickCount > 0) {
+            --tickCount;
+        } else {
+            ActionRunner.doAction(lastKey, key);
+            lastKey = null;
+            key = null;
+        }
     }
 
-    public static int getTickCountKey() {
-        return tickCountKey;
+    public static void setTickCount(int c) {
+        tickCount = c;
     }
+//    public static void keyBindTick() {
+//        key = null;
+//        lastKey = null;
+////        if (tickCount == 0) {
+////            lastKey = null;
+////        } else {
+////            --tickCount;
+////        }
+//        for (KeyBinding k : keyList) {
+//            if (k.isPressed()) {
+//                if (lastKey == null) {
+//                    lastKey = k;
+////                    tickCount = 5;
+//                }
+////                if (lastKey == k && key != null) {
+////                    continue;
+////                }
+//                key = k;
+//            }
+//        }
+//        Action.doAction(lastKey, key);
+//    }
 }

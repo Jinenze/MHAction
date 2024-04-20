@@ -1,6 +1,6 @@
 package com.example.examplemod.mixin;
 
-import com.example.examplemod.client.action.Action;
+import com.example.examplemod.client.action.ActionRunner;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,13 +12,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class KeyboardInputMixin extends Input {
     @Inject(method = "tick", at = @At("RETURN"))
     private void tickInject(boolean slowDown, float slowDownFactor, CallbackInfo ci) {
-        if (Action.isActionRunning()) {
+        if (ActionRunner.isActionRunning()) {
 //            this.pressingForward = false;
 //            this.pressingBack = false;
 //            this.pressingLeft = false;
 //            this.pressingRight = false;
-            Action.movementForward = this.movementForward;
-            Action.movementSideways = this.movementSideways;
+            ActionRunner.movementForward = this.movementForward;
+            ActionRunner.movementSideways = this.movementSideways;
             this.movementForward = 0.0f;
             this.movementSideways = 0.0f;
             this.jumping = false;
