@@ -8,7 +8,6 @@ import dev.kosmx.playerAnim.api.layered.ModifierLayer;
 import dev.kosmx.playerAnim.api.layered.modifier.AbstractFadeModifier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +22,6 @@ public class ActionRunner {
     private static int inputTime;
     private static int stopTime;
     private static int actionStage;
-    private static int actionTime;
     private static boolean actionRunning;
     @Nullable
     private static AbstractAction lastAction;
@@ -59,40 +57,36 @@ public class ActionRunner {
         }
     }
 
-    public static void doAction(KeyBinding lastKey, KeyBinding key) {
+    public static void searchAction(KeyBinding lastKey, KeyBinding key) {
         for (AbstractAction a : Actions) {
             KeyBinding[] keys = a.getActionKey();
             if ((keys[0] == lastKey && keys[1] == key) || (keys[1] == lastKey && keys[0] == key)) {
-                setAction(a);
+                isAvailableAction(a);
             }
         }
     }
 
-    public static void setAction(AbstractAction action) {
+    public static void isAvailableAction(AbstractAction action) {
         if (action == runningAction) {
             return;
         }
         if ((!actionRunning || actionStage == 2)) {
             if (runningAction != null) {
                 if (!runningAction.isAvailable(action)) {
-                    lastAction = runningAction;
                     return;
                 }
             }
             runAction(action);
-        } else if (lastAction != null) {
-            if (!lastAction.isAvailable(action)) {
-                return;
-            }
-            runAction(action);
         }
     }
-    private static void runAction(AbstractAction action){
+
+    public static void runAction(AbstractAction action) {
         runningAction = action;
         cooldown = action.getStage1();
         inputTime = action.getStage2();
         stopTime = action.getStage3();
-        ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(new Identifier(ExampleMod.MODID, "main_anim"))).replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(20, (modelName, type, value) -> value), new KeyframeAnimationPlayer(action.getActionAnim()), actionRunning);
+        int length = (cooldown + inputTime + stopTime);
+        ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(new Identifier(ExampleMod.MODID, "main_anim"))).replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(length, (modelName, type, value) -> value), new KeyframeAnimationPlayer(action.getActionAnim()), actionRunning);
         actionRunning = true;
         action.run();
     }

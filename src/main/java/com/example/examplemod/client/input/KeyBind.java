@@ -38,7 +38,7 @@ public class KeyBind {
         if (tickCount > 0) {
             --tickCount;
         } else {
-            ActionRunner.doAction(lastKey, key);
+            ActionRunner.searchAction(lastKey, key);
             lastKey = null;
             key = null;
         }
