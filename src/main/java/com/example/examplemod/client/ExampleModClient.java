@@ -16,9 +16,9 @@ public class ExampleModClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        ClientTickEvents.START_CLIENT_TICK.register((client) -> {
-            ActionRunner.actionTick();
+        ClientTickEvents.END_CLIENT_TICK.register((client) -> {
             KeyBind.keyBindTick();
+            ActionRunner.actionTick();
         });
         PlayerAnimationAccess.REGISTER_ANIMATION_EVENT.register(ModAnimations::register);
         ModKeyBinds.register();

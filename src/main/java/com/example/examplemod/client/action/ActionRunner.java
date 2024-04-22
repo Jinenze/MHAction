@@ -24,8 +24,6 @@ public class ActionRunner {
     private static int actionStage;
     private static boolean actionRunning;
     @Nullable
-    private static AbstractAction lastAction;
-    @Nullable
     private static AbstractAction runningAction;
     private static final ArrayList<AbstractAction> Actions = new ArrayList<>();
 
@@ -37,22 +35,28 @@ public class ActionRunner {
                 }
                 if (cooldown > 0) {
                     --cooldown;
+                    break;
                 } else {
                     actionStage = 1;
+                    break;
                 }
             case 1:
                 if (inputTime > 0) {
                     --inputTime;
+                    break;
                 } else {
                     actionStage = 2;
+                    break;
                 }
             case 2:
                 if (stopTime > 0) {
                     --stopTime;
+                    break;
                 } else {
                     actionStage = 0;
                     actionRunning = false;
                     runningAction = null;
+                    break;
                 }
         }
     }
@@ -70,7 +74,7 @@ public class ActionRunner {
         if (action == runningAction) {
             return;
         }
-        if ((!actionRunning || actionStage == 2)) {
+        if (!actionRunning || actionStage == 1) {
             if (runningAction != null) {
                 if (!runningAction.isAvailable(action)) {
                     return;
@@ -81,13 +85,15 @@ public class ActionRunner {
     }
 
     public static void runAction(AbstractAction action) {
+        ExampleMod.LOGGER.info(String.valueOf(cooldown));
         runningAction = action;
-        cooldown = action.getStage1();
-        inputTime = action.getStage2();
-        stopTime = action.getStage3();
+        cooldown = action.getStage0();
+        inputTime = action.getStage1();
+        stopTime = action.getStage2();
         int length = (cooldown + inputTime + stopTime);
         ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(new Identifier(ExampleMod.MODID, "main_anim"))).replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(length, (modelName, type, value) -> value), new KeyframeAnimationPlayer(action.getActionAnim()), actionRunning);
         actionRunning = true;
+        actionStage = 0;
         action.run();
     }
 

@@ -26,7 +26,7 @@ public class KeyBind {
         for (KeyBinding k : keyList) {
             if (k.isPressed()) {
                 if (k != lastKey && tickCount <= 0) {
-                    tickCount = 3;
+                    tickCount = 4;
                 }
                 if (lastKey == null) {
                     lastKey = k;
