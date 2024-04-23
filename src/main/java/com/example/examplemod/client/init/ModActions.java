@@ -6,7 +6,9 @@ import com.example.examplemod.client.action.ActionRunner;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec2f;
 
 @Environment(EnvType.CLIENT)
 public class ModActions {
@@ -16,7 +18,9 @@ public class ModActions {
             if (MinecraftClient.getInstance().player == null) {
                 return;
             }
-            MinecraftClient.getInstance().player.takeKnockback(1, 1, 0);
+            ClientPlayerEntity player = MinecraftClient.getInstance().player;
+            Vec2f vec2f = player.input.getMovementInput();
+            player.takeKnockback(1, vec2f.y, vec2f.x);
         }
     };
 

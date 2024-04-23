@@ -17,8 +17,6 @@ public class KeyboardInputMixin extends Input {
 //            this.pressingBack = false;
 //            this.pressingLeft = false;
 //            this.pressingRight = false;
-            ActionRunner.movementForward = this.movementForward;
-            ActionRunner.movementSideways = this.movementSideways;
             this.movementForward = 0.0f;
             this.movementSideways = 0.0f;
             this.jumping = false;

@@ -16,9 +16,7 @@ import java.util.ArrayList;
 
 @Environment(EnvType.CLIENT)
 public class ActionRunner {
-    public static float movementForward;
-    public static float movementSideways;
-    public static int cooldown;
+    private static int cooldown;
     private static int inputTime;
     private static int stopTime;
     private static int actionStage;

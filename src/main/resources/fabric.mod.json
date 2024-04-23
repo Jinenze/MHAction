@@ -32,10 +32,7 @@
 		"minecraft": ">=1.20.0",
 		"java": ">=17",
 		"fabric-api": "*",
-		"player-animator": ">=1.0.0",
-		"fabric-key-binding-api-v1": "*",
-		"fabric-networking-api-v1": "*",
-		"fabric-lifecycle-events-v1": "*"
+		"player-animator": ">=1.0.0"
 	},
 	"suggests": {
 
