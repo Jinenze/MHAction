@@ -1,6 +1,6 @@
 {
     "name": "temple_animation",
-    "author": "",
+    "author": "Jinenze",
     "description": "",
     "emote":{
         "isLoop": "false",
@@ -11,6 +11,30 @@
         "degrees":false,
         "moves":[
             
+            {
+                "tick":20,
+                "easing": "EASEINOUTQUAD",
+                "turn": 0,
+                "head":{
+                    "yaw":-6.2831854820251465
+                }
+            },
+            {
+                "tick":20,
+                "easing": "EASEINOUTQUAD",
+                "turn": 0,
+                "head":{
+                    "roll":-6.2831854820251465
+                }
+            },
+            {
+                "tick":20,
+                "easing": "EASEINOUTQUAD",
+                "turn": 0,
+                "head":{
+                    "pitch":6.2831854820251465
+                }
+            },
             {
                 "tick":20,
                 "easing": "EASEINOUTQUAD",

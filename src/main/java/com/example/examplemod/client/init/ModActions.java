@@ -9,6 +9,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.Vec3d;
 
 @Environment(EnvType.CLIENT)
 public class ModActions {
@@ -20,7 +21,7 @@ public class ModActions {
             }
             ClientPlayerEntity player = MinecraftClient.getInstance().player;
             Vec2f vec2f = player.input.getMovementInput();
-            player.takeKnockback(1, vec2f.y, vec2f.x);
+            player.travel(new Vec3d(vec2f.x, 0, vec2f.y));
         }
     };
 

@@ -8,6 +8,8 @@ import dev.kosmx.playerAnim.api.layered.ModifierLayer;
 import dev.kosmx.playerAnim.api.layered.modifier.AbstractFadeModifier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +23,8 @@ public class ActionRunner {
     private static int stopTime;
     private static int actionStage;
     private static boolean actionRunning;
+    public static float actionHeadYaw;
+    public static float actionBodyYaw;
     @Nullable
     private static AbstractAction runningAction;
     private static final ArrayList<AbstractAction> Actions = new ArrayList<>();
@@ -31,31 +35,36 @@ public class ActionRunner {
                 if (!actionRunning) {
                     break;
                 }
-                if (cooldown > 0) {
+                if (cooldown > 1) {
                     --cooldown;
-                    break;
                 } else {
+                    --cooldown;
                     actionStage = 1;
-                    break;
                 }
+                break;
             case 1:
-                if (inputTime > 0) {
+                if (inputTime > 1) {
                     --inputTime;
-                    break;
                 } else {
+                    --inputTime;
                     actionStage = 2;
-                    break;
                 }
+                break;
             case 2:
-                if (stopTime > 0) {
+                if (stopTime > 1) {
                     --stopTime;
-                    break;
                 } else {
+                    --stopTime;
                     actionStage = 0;
                     actionRunning = false;
                     runningAction = null;
-                    break;
                 }
+                break;
+        }
+        if (actionRunning) {
+            ClientPlayerEntity player = MinecraftClient.getInstance().player;
+            player.headYaw = actionHeadYaw;
+            player.bodyYaw = actionBodyYaw;
         }
     }
 
@@ -74,7 +83,7 @@ public class ActionRunner {
         }
         if (!actionRunning || actionStage == 1) {
             if (runningAction != null) {
-                if (!runningAction.isAvailable(action)) {
+                if (!runningAction.isAvailable(action) && !action.isAvailable()) {
                     return;
                 }
             }
@@ -83,13 +92,15 @@ public class ActionRunner {
     }
 
     public static void runAction(AbstractAction action) {
-        ExampleMod.LOGGER.info(String.valueOf(cooldown));
         runningAction = action;
         cooldown = action.getStage0();
         inputTime = action.getStage1();
         stopTime = action.getStage2();
         int length = (cooldown + inputTime + stopTime);
         ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(new Identifier(ExampleMod.MODID, "main_anim"))).replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(length, (modelName, type, value) -> value), new KeyframeAnimationPlayer(action.getActionAnim()), actionRunning);
+        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        actionHeadYaw = player.getHeadYaw();
+        actionBodyYaw = player.getBodyYaw();
         actionRunning = true;
         actionStage = 0;
         action.run();

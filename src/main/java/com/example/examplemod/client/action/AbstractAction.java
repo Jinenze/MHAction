@@ -25,6 +25,10 @@ public abstract class AbstractAction {
 
     public abstract void run();
 
+    public boolean isAvailable() {
+        return true;
+    }
+
     public boolean isAvailable(AbstractAction action) {
         for (AbstractAction a : availableAction) {
             if (a == action) {
