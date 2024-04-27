@@ -1,4 +1,4 @@
-package com.example.examplemod.client.action;
+package com.example.examplemod.action;
 
 import com.example.examplemod.ExampleMod;
 import com.example.examplemod.client.init.ModAnimations;
@@ -21,50 +21,48 @@ public class ActionRunner {
     private static int cooldown;
     private static int inputTime;
     private static int stopTime;
-    private static int actionStage;
+    private static int actionStage = 1;
     private static boolean actionRunning;
     public static float actionHeadYaw;
     public static float actionBodyYaw;
     @Nullable
     private static AbstractAction runningAction;
+    public static ClientPlayerEntity player;
     private static final ArrayList<AbstractAction> Actions = new ArrayList<>();
 
     public static void actionTick() {
         switch (actionStage) {
-            case 0:
+            case 1:
                 if (!actionRunning) {
                     break;
                 }
-                if (cooldown > 1) {
+                if (cooldown > 0) {
                     --cooldown;
+                    break;
                 } else {
-                    --cooldown;
-                    actionStage = 1;
-                }
-                break;
-            case 1:
-                if (inputTime > 1) {
-                    --inputTime;
-                } else {
-                    --inputTime;
                     actionStage = 2;
                 }
-                break;
             case 2:
-                if (stopTime > 1) {
+                if (inputTime > 0) {
+                    --inputTime;
+                    break;
+                } else {
+                    actionStage = 3;
+                }
+            case 3:
+                if (stopTime > 0) {
                     --stopTime;
                 } else {
-                    --stopTime;
-                    actionStage = 0;
+                    actionStage = 1;
                     actionRunning = false;
                     runningAction = null;
                 }
                 break;
         }
         if (actionRunning) {
-            ClientPlayerEntity player = MinecraftClient.getInstance().player;
             player.headYaw = actionHeadYaw;
             player.bodyYaw = actionBodyYaw;
+            runningAction.onClientTick();
         }
     }
 
@@ -98,7 +96,7 @@ public class ActionRunner {
         stopTime = action.getStage2();
         int length = (cooldown + inputTime + stopTime);
         ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(new Identifier(ExampleMod.MODID, "main_anim"))).replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(length, (modelName, type, value) -> value), new KeyframeAnimationPlayer(action.getActionAnim()), actionRunning);
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        player = MinecraftClient.getInstance().player;
         actionHeadYaw = player.getHeadYaw();
         actionBodyYaw = player.getBodyYaw();
         actionRunning = true;
@@ -120,7 +118,17 @@ public class ActionRunner {
         Actions.add(action);
     }
 
+    public static int getActionStage() {
+        return actionStage;
+    }
+
     public static boolean isActionRunning() {
         return actionRunning;
+    }
+
+    public static void actionAttackCallBack() {
+        if(runningAction != null){
+            runningAction.attacked();
+        }
     }
 }

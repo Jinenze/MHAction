@@ -1,4 +1,4 @@
-package com.example.examplemod.client.action;
+package com.example.examplemod.action;
 
 import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
@@ -24,6 +24,10 @@ public abstract class AbstractAction {
     }
 
     public abstract void run();
+
+    public abstract void onClientTick();
+
+    public abstract void attacked();
 
     public boolean isAvailable() {
         return true;

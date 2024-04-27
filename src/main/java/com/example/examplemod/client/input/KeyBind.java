@@ -1,6 +1,6 @@
 package com.example.examplemod.client.input;
 
-import com.example.examplemod.client.action.ActionRunner;
+import com.example.examplemod.action.ActionRunner;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.option.KeyBinding;

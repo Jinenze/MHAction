@@ -1,6 +1,6 @@
 package com.example.examplemod.client;
 
-import com.example.examplemod.client.action.ActionRunner;
+import com.example.examplemod.action.ActionRunner;
 import com.example.examplemod.client.init.ModActions;
 import com.example.examplemod.client.init.ModAnimations;
 import com.example.examplemod.client.init.ModKeyBinds;
