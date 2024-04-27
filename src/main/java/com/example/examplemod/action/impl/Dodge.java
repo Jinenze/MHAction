@@ -13,7 +13,7 @@ public class Dodge extends AbstractAction {
 
     @Override
     public void onClientTick() {
-        if (ActionRunner.getActionStage() != 2){
+        if (ActionRunner.getActionStage() != 3){
             return;
         }
         ActionRunner.player.setVelocity(new Vec3d(-Math.sin(Math.toRadians(ActionRunner.actionHeadYaw)), 0, Math.cos(Math.toRadians(ActionRunner.actionHeadYaw))));

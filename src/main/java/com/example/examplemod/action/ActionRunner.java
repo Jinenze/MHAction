@@ -60,8 +60,6 @@ public class ActionRunner {
                 break;
         }
         if (actionRunning) {
-            player.headYaw = actionHeadYaw;
-            player.bodyYaw = actionBodyYaw;
             runningAction.onClientTick();
         }
     }
@@ -79,7 +77,7 @@ public class ActionRunner {
         if (action == runningAction) {
             return;
         }
-        if (!actionRunning || actionStage == 1) {
+        if (!actionRunning || actionStage == 2) {
             if (runningAction != null) {
                 if (!runningAction.isAvailable(action) && !action.isAvailable()) {
                     return;
@@ -100,7 +98,7 @@ public class ActionRunner {
         actionHeadYaw = player.getHeadYaw();
         actionBodyYaw = player.getBodyYaw();
         actionRunning = true;
-        actionStage = 0;
+        actionStage = 1;
         action.run();
     }
 

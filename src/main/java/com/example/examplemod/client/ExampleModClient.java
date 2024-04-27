@@ -17,6 +17,12 @@ public class ExampleModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
+            if (ActionRunner.isActionRunning()) {
+                ActionRunner.player.headYaw = ActionRunner.actionHeadYaw;
+                ActionRunner.player.bodyYaw = ActionRunner.actionBodyYaw;
+            }
+        });
+        ClientTickEvents.START_WORLD_TICK.register((client) -> {
             KeyBind.keyBindTick();
             ActionRunner.actionTick();
         });
