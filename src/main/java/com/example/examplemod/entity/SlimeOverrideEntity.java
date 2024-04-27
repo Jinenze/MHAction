@@ -1,6 +1,6 @@
 package com.example.examplemod.entity;
 
-import com.example.examplemod.action.ActionRunner;
+import com.example.examplemod.client.action.ClientActionRunner;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -11,13 +11,13 @@ public class SlimeOverrideEntity extends SlimeEntity {
     @Override
     protected void damage(LivingEntity target){
         if(this.isAlive()){
-            ActionRunner.actionAttackCallBack();
+            ClientActionRunner.actionAttackCallBack();
         }
     }
     @Override
     public boolean damage(DamageSource source, float amount){
         if(this.isAlive()){
-            ActionRunner.actionAttackCallBack();
+            ClientActionRunner.actionAttackCallBack();
         }
         return true;
     }

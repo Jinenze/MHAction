@@ -7,7 +7,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.util.Identifier;
 
-@Environment(EnvType.CLIENT)
 public abstract class AbstractAction {
     private final int stage0;
     private final int stage1;
@@ -23,16 +22,28 @@ public abstract class AbstractAction {
         this.actionAnim = actionAnim;
     }
 
-    public abstract void run();
+    public void run() {
+    }
 
-    public abstract void onClientTick();
+    public void onTick() {
+    }
 
-    public abstract void attacked();
+    public void onServerTick() {
+    }
 
+    @Environment(EnvType.CLIENT)
+    public void onClientTick() {
+    }
+
+    public void attacked() {
+    }
+
+    @Environment(EnvType.CLIENT)
     public boolean isAvailable() {
         return true;
     }
 
+    @Environment(EnvType.CLIENT)
     public boolean isAvailable(AbstractAction action) {
         for (AbstractAction a : availableAction) {
             if (a == action) {
@@ -54,18 +65,22 @@ public abstract class AbstractAction {
         return stage2;
     }
 
+    @Environment(EnvType.CLIENT)
     public KeyBinding[] getActionKey() {
         return actionKey;
     }
 
+    @Environment(EnvType.CLIENT)
     public void setActionKey(KeyBinding[] key) {
         actionKey = key;
     }
 
+    @Environment(EnvType.CLIENT)
     public KeyframeAnimation getActionAnim() {
         return PlayerAnimationRegistry.getAnimation(actionAnim);
     }
 
+    @Environment(EnvType.CLIENT)
     public void setAvailableAction(AbstractAction[] availableAction) {
         this.availableAction = availableAction;
     }

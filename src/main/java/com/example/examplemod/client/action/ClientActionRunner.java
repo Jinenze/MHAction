@@ -1,7 +1,8 @@
-package com.example.examplemod.action;
+package com.example.examplemod.client.action;
 
 import com.example.examplemod.ExampleMod;
-import com.example.examplemod.client.init.ModAnimations;
+import com.example.examplemod.action.AbstractAction;
+import com.example.examplemod.init.ModAnimations;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
 import dev.kosmx.playerAnim.api.layered.ModifierLayer;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 @Environment(EnvType.CLIENT)
-public class ActionRunner {
+public class ClientActionRunner {
     private static int cooldown;
     private static int inputTime;
     private static int stopTime;

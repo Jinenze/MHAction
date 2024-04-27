@@ -1,4 +1,4 @@
-package com.example.examplemod.client.init;
+package com.example.examplemod.init;
 
 import com.example.examplemod.ExampleMod;
 import dev.kosmx.playerAnim.api.layered.AnimationStack;

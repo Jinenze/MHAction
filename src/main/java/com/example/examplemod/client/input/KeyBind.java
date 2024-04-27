@@ -1,6 +1,6 @@
 package com.example.examplemod.client.input;
 
-import com.example.examplemod.action.ActionRunner;
+import com.example.examplemod.client.action.ClientActionRunner;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.option.KeyBinding;
@@ -38,7 +38,7 @@ public class KeyBind {
         if (tickCount > 0) {
             --tickCount;
         } else {
-            ActionRunner.searchAction(lastKey, key);
+            ClientActionRunner.searchAction(lastKey, key);
             lastKey = null;
             key = null;
         }
