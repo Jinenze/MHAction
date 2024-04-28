@@ -22,6 +22,9 @@
 		],
 		"fabric-datagen": [
 			"com.example.examplemod.ExampleModDataGenerator"
+		],
+		"modmenu": [
+			"com.example.examplemod.config.ModMenuEntry"
 		]
 	},
 	"mixins": [
@@ -32,7 +35,8 @@
 		"minecraft": ">=1.20.0",
 		"java": ">=17",
 		"fabric-api": "*",
-		"player-animator": ">=1.0.0"
+		"player-animator": ">=1.0.0",
+		"cloth-config": ">=11.0.0"
 	},
 	"suggests": {
 

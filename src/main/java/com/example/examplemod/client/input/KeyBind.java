@@ -47,26 +47,4 @@ public class KeyBind {
     public static void setTickCount(int c) {
         tickCount = c;
     }
-//    public static void keyBindTick() {
-//        key = null;
-//        lastKey = null;
-////        if (tickCount == 0) {
-////            lastKey = null;
-////        } else {
-////            --tickCount;
-////        }
-//        for (KeyBinding k : keyList) {
-//            if (k.isPressed()) {
-//                if (lastKey == null) {
-//                    lastKey = k;
-////                    tickCount = 5;
-//                }
-////                if (lastKey == k && key != null) {
-////                    continue;
-////                }
-//                key = k;
-//            }
-//        }
-//        Action.doAction(lastKey, key);
-//    }
 }

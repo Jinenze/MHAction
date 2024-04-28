@@ -1,11 +1,14 @@
 package com.example.examplemod.client;
 
 import com.example.examplemod.client.action.ClientActionRunner;
+import com.example.examplemod.config.ClientConfig;
 import com.example.examplemod.init.ModActions;
 import com.example.examplemod.init.ModAnimations;
 import com.example.examplemod.init.ModKeyBinds;
 import com.example.examplemod.client.input.KeyBind;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -29,5 +32,6 @@ public class ExampleModClient implements ClientModInitializer {
         PlayerAnimationAccess.REGISTER_ANIMATION_EVENT.register(ModAnimations::register);
         ModKeyBinds.register();
         ModActions.client();
+        AutoConfig.register(ClientConfig.class, GsonConfigSerializer::new);
     }
 }

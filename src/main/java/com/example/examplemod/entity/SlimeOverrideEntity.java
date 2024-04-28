@@ -11,6 +11,7 @@ public class SlimeOverrideEntity extends SlimeEntity {
     @Override
     protected void damage(LivingEntity target){
         if(this.isAlive()){
+            //发包到Client
             ClientActionRunner.actionAttackCallBack();
         }
     }

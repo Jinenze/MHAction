@@ -4,7 +4,6 @@ import com.example.examplemod.action.AbstractAction;
 import com.example.examplemod.client.action.ClientActionRunner;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
 public class Dodge extends AbstractAction {
@@ -34,7 +33,8 @@ public class Dodge extends AbstractAction {
         return ClientActionRunner.player.isOnGround();
     }
 
-    public Dodge(int stage1, int stage2, int stage3, Identifier actionAnim) {
-        super(stage1, stage2, stage3, actionAnim);
+    public Dodge(int stage1, int stage2, int stage3, AbstractAction... availableAction) {
+        super(stage1, stage2, stage3, availableAction);
     }
+
 }

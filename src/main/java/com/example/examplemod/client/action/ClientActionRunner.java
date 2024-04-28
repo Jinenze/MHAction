@@ -1,6 +1,5 @@
 package com.example.examplemod.client.action;
 
-import com.example.examplemod.ExampleMod;
 import com.example.examplemod.action.AbstractAction;
 import com.example.examplemod.init.ModAnimations;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
@@ -90,11 +89,11 @@ public class ClientActionRunner {
 
     public static void runAction(AbstractAction action) {
         runningAction = action;
-        cooldown = action.getStage0();
-        inputTime = action.getStage1();
-        stopTime = action.getStage2();
+        cooldown = action.getStage1();
+        inputTime = action.getStage2();
+        stopTime = action.getStage3();
         int length = (cooldown + inputTime + stopTime);
-        ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(new Identifier(ExampleMod.MODID, "main_anim"))).replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(length, (modelName, type, value) -> value), new KeyframeAnimationPlayer(action.getActionAnim()), actionRunning);
+        ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(ModAnimations.mainAnim)).replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(length, (modelName, type, value) -> value), new KeyframeAnimationPlayer(action.getActionAnim()), actionRunning);
         player = MinecraftClient.getInstance().player;
         actionHeadYaw = player.getHeadYaw();
         actionBodyYaw = player.getBodyYaw();
@@ -103,17 +102,17 @@ public class ClientActionRunner {
         action.run();
     }
 
-    public static void register(AbstractAction action, KeyBinding key, AbstractAction... availableAction) {
+    public static void register(AbstractAction action, KeyBinding key, Identifier actionAnim) {
         KeyBinding[] k = {null, key};
         action.setActionKey(k);
-        action.setAvailableAction(availableAction);
+        action.setActionAnim(actionAnim);
         Actions.add(action);
     }
 
-    public static void register(AbstractAction action, KeyBinding lastKey, KeyBinding key, AbstractAction... availableAction) {
+    public static void register(AbstractAction action, KeyBinding lastKey, KeyBinding key, Identifier actionAnim) {
         KeyBinding[] k = {lastKey, key};
         action.setActionKey(k);
-        action.setAvailableAction(availableAction);
+        action.setActionAnim(actionAnim);
         Actions.add(action);
     }
 
@@ -126,7 +125,7 @@ public class ClientActionRunner {
     }
 
     public static void actionAttackCallBack() {
-        if(runningAction != null){
+        if (runningAction != null) {
             runningAction.attacked();
         }
     }

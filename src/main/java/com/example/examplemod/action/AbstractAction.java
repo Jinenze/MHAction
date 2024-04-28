@@ -8,18 +8,18 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.util.Identifier;
 
 public abstract class AbstractAction {
-    private final int stage0;
-    private final int stage1;
-    private final int stage2;
+    private int stage1;
+    private int stage2;
+    private int stage3;
     private KeyBinding[] actionKey;
-    private final Identifier actionAnim;
+    private Identifier actionAnim;
     private AbstractAction[] availableAction;
 
-    public AbstractAction(int stage1, int stage2, int stage3, Identifier actionAnim) {
-        this.stage0 = stage1;
-        this.stage1 = stage2;
-        this.stage2 = stage3;
-        this.actionAnim = actionAnim;
+    public AbstractAction(int stage1, int stage2, int stage3, AbstractAction... availableAction) {
+        this.stage1 = stage1;
+        this.stage2 = stage2;
+        this.stage3 = stage3;
+        this.availableAction = availableAction;
     }
 
     public void run() {
@@ -53,8 +53,16 @@ public abstract class AbstractAction {
         return false;
     }
 
-    public int getStage0() {
-        return stage0;
+    public void setStage1(int stage1) {
+        this.stage1 = stage1;
+    }
+
+    public void setStage2(int stage2) {
+        this.stage2 = stage2;
+    }
+
+    public void setStage3(int stage3) {
+        this.stage3 = stage3;
     }
 
     public int getStage1() {
@@ -63,6 +71,10 @@ public abstract class AbstractAction {
 
     public int getStage2() {
         return stage2;
+    }
+
+    public int getStage3() {
+        return stage3;
     }
 
     @Environment(EnvType.CLIENT)
@@ -78,6 +90,11 @@ public abstract class AbstractAction {
     @Environment(EnvType.CLIENT)
     public KeyframeAnimation getActionAnim() {
         return PlayerAnimationRegistry.getAnimation(actionAnim);
+    }
+
+    @Environment(EnvType.CLIENT)
+    public void setActionAnim(Identifier actionAnim) {
+        this.actionAnim = actionAnim;
     }
 
     @Environment(EnvType.CLIENT)
