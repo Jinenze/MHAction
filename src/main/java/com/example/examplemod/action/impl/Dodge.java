@@ -1,6 +1,5 @@
 package com.example.examplemod.action.impl;
 
-import com.example.examplemod.ExampleMod;
 import com.example.examplemod.action.AbstractAction;
 import com.example.examplemod.client.action.ClientActionRunner;
 import com.example.examplemod.config.ServerConfig;
