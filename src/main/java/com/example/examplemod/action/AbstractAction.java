@@ -1,5 +1,6 @@
 package com.example.examplemod.action;
 
+import com.example.examplemod.config.ServerConfig;
 import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import net.fabricmc.api.EnvType;
@@ -15,10 +16,10 @@ public abstract class AbstractAction {
     private Identifier actionAnim;
     private AbstractAction[] availableAction;
 
-    public AbstractAction(int stage1, int stage2, int stage3, AbstractAction... availableAction) {
-        this.stage1 = stage1;
-        this.stage2 = stage2;
-        this.stage3 = stage3;
+    public AbstractAction(ServerConfig.ActionTimeConfig config, AbstractAction... availableAction) {
+        this.stage1 = config.stage1;
+        this.stage2 = config.stage2;
+        this.stage3 = config.stage3;
         this.availableAction = availableAction;
     }
 
@@ -97,7 +98,6 @@ public abstract class AbstractAction {
         this.actionAnim = actionAnim;
     }
 
-    @Environment(EnvType.CLIENT)
     public void setAvailableAction(AbstractAction[] availableAction) {
         this.availableAction = availableAction;
     }

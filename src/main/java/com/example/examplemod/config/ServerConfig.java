@@ -2,21 +2,20 @@ package com.example.examplemod.config;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
-import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
 @Config(name = "server")
 public class ServerConfig implements ConfigData {
-    boolean toggleA = true;
-    boolean toggleB = false;
+    public ActionTimeConfig dodge = new ActionTimeConfig(20, 0, 5);
 
-    @ConfigEntry.Gui.CollapsibleObject
-    InnerStuff stuff = new InnerStuff();
+    public static class ActionTimeConfig {
+        private ActionTimeConfig(int a, int b, int c) {
+            stage1 = a;
+            stage2 = b;
+            stage3 = c;
+        }
 
-    @ConfigEntry.Gui.Excluded
-    InnerStuff invisibleStuff = new InnerStuff();
-
-    static class InnerStuff {
-        int a = 0;
-        int b = 1;
+        public int stage1;
+        public int stage2;
+        public int stage3;
     }
 }

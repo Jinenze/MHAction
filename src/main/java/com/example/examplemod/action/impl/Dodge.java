@@ -2,11 +2,13 @@ package com.example.examplemod.action.impl;
 
 import com.example.examplemod.action.AbstractAction;
 import com.example.examplemod.client.action.ClientActionRunner;
+import com.example.examplemod.config.ServerConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.math.Vec3d;
 
 public class Dodge extends AbstractAction {
+
 
     @Override
     public void run() {
@@ -33,8 +35,7 @@ public class Dodge extends AbstractAction {
         return ClientActionRunner.player.isOnGround();
     }
 
-    public Dodge(int stage1, int stage2, int stage3, AbstractAction... availableAction) {
-        super(stage1, stage2, stage3, availableAction);
+    public Dodge(ServerConfig.ActionTimeConfig config, AbstractAction... availableAction) {
+        super(config, availableAction);
     }
-
 }
