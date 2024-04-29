@@ -3,11 +3,11 @@ package com.example.examplemod.client;
 import com.example.examplemod.client.action.ClientActionRunner;
 import com.example.examplemod.config.ClientConfig;
 import com.example.examplemod.config.ClientConfigWrapper;
-import com.example.examplemod.config.ServerConfigWrapper;
 import com.example.examplemod.init.ModActions;
 import com.example.examplemod.init.ModAnimations;
 import com.example.examplemod.init.ModKeyBinds;
 import com.example.examplemod.client.input.KeyBind;
+import com.example.examplemod.network.ClientNetwork;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
@@ -16,6 +16,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 
 @Environment(EnvType.CLIENT)
 public class ExampleModClient implements ClientModInitializer {
@@ -36,7 +37,7 @@ public class ExampleModClient implements ClientModInitializer {
         AutoConfig.register(ClientConfigWrapper.class, PartitioningSerializer.wrap(GsonConfigSerializer::new));
         config = AutoConfig.getConfigHolder(ClientConfigWrapper.class).getConfig().client;
         PlayerAnimationAccess.REGISTER_ANIMATION_EVENT.register(ModAnimations::register);
+        ClientNetwork.register();
         ModKeyBinds.register();
-        ModActions.client();
     }
 }

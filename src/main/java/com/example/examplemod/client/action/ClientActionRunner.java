@@ -79,11 +79,12 @@ public class ClientActionRunner {
         }
         if (!actionRunning || actionStage == 2) {
             if (runningAction != null) {
-                if (!runningAction.isAvailable(action) && !action.isAvailable()) {
-                    return;
+                if (runningAction.isAvailable(action) && action.isAvailable()) {
+                    runAction(action);
                 }
+            }else if(action.isAvailable()){
+                runAction(action);
             }
-            runAction(action);
         }
     }
 
