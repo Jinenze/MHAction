@@ -15,18 +15,15 @@
 
 ~~client触发action~~
 ~~client发包到server~~
-server生成实体等待伤害
+~~server生成实体等待伤害~~
+
+~~server伤害检测~~
 
 ~~实体生成 client请求服务器生成实体~~
 
-实体用什么ai? 具体继承哪个类?
+~~实体存在上限200tick~~
 
-服务器启动和关闭时清理实体?
-player退出时清理实体?
-MinecraftServer添加实体列表?
-检测server实体列表?
-
-action3阶段结束时清理实体
+action3阶段结束时清理实体?
 
 攻击
 
@@ -37,4 +34,3 @@ action3阶段结束时清理实体
 [^1]: 故意的
 
 server确认攻击后发包到client client计算值
-

@@ -82,7 +82,7 @@ public class ClientActionRunner {
                 if (runningAction.isAvailable(action) && action.isAvailable()) {
                     runAction(action);
                 }
-            }else if(action.isAvailable()){
+            } else if (action.isAvailable()) {
                 runAction(action);
             }
         }

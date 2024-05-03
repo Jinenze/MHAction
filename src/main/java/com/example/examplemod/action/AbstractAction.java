@@ -9,12 +9,12 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.util.Identifier;
 
 public abstract class AbstractAction {
-    private int stage1;
-    private int stage2;
-    private int stage3;
+    private final int stage1;
+    private final int stage2;
+    private final int stage3;
     private KeyBinding[] actionKey;
     private Identifier actionAnim;
-    private AbstractAction[] availableAction;
+    private final AbstractAction[] availableAction;
 
     public AbstractAction(ServerConfig.ActionTimeConfig config, AbstractAction... availableAction) {
         this.stage1 = config.stage1;
@@ -23,14 +23,15 @@ public abstract class AbstractAction {
         this.availableAction = availableAction;
     }
 
+    @Environment(EnvType.CLIENT)
     public void run() {
     }
 
-    public void onTick() {
-    }
-
-    public void onServerTick() {
-    }
+//    public void onTick() {
+//    }
+//
+//    public void onServerTick() {
+//    }
 
     @Environment(EnvType.CLIENT)
     public void onClientTick() {
@@ -52,18 +53,6 @@ public abstract class AbstractAction {
             }
         }
         return false;
-    }
-
-    public void setStage1(int stage1) {
-        this.stage1 = stage1;
-    }
-
-    public void setStage2(int stage2) {
-        this.stage2 = stage2;
-    }
-
-    public void setStage3(int stage3) {
-        this.stage3 = stage3;
     }
 
     public int getStage1() {
@@ -96,9 +85,5 @@ public abstract class AbstractAction {
     @Environment(EnvType.CLIENT)
     public void setActionAnim(Identifier actionAnim) {
         this.actionAnim = actionAnim;
-    }
-
-    public void setAvailableAction(AbstractAction[] availableAction) {
-        this.availableAction = availableAction;
     }
 }
