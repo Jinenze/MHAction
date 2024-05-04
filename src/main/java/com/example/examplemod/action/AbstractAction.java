@@ -5,7 +5,9 @@ import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 
 public abstract class AbstractAction {
@@ -24,20 +26,14 @@ public abstract class AbstractAction {
     }
 
     @Environment(EnvType.CLIENT)
-    public void run() {
+    public void clientInit(ClientPlayerEntity player) {
     }
-
-//    public void onTick() {
-//    }
-//
-//    public void onServerTick() {
-//    }
 
     @Environment(EnvType.CLIENT)
-    public void onClientTick() {
+    public void onClientTick(ClientPlayerEntity player) {
     }
 
-    public void attacked() {
+    public void attacked(PlayerEntity player) {
     }
 
     @Environment(EnvType.CLIENT)

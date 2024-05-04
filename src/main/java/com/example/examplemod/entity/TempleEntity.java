@@ -1,5 +1,6 @@
 package com.example.examplemod.entity;
 
+import com.example.examplemod.ExampleMod;
 import com.example.examplemod.network.ServerNetwork;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class TempleEntity extends LivingEntity implements Ownable {
     private static final int DESPAWN_AGE = 200;
-//    private UUID ownerUuid;
+    //        private UUID ownerUuid;
     private Entity owner;
 
     public TempleEntity(EntityType<? extends LivingEntity> type, World world) {
@@ -33,7 +34,7 @@ public class TempleEntity extends LivingEntity implements Ownable {
 
     @Override
     public boolean damage(DamageSource source, float amount) {
-        if (this.getWorld() instanceof ServerWorld) {
+        if (this.getWorld() instanceof ServerWorld && !(ExampleMod.config.player_attack_collect && source.getAttacker() instanceof ServerPlayerEntity)) {
             ServerNetwork.sendActionCallback((ServerPlayerEntity) owner);
             this.discard();
         }

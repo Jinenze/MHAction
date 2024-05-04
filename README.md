@@ -11,6 +11,13 @@
 ---
 以下是一些计划
 
+物品
+
+添加物品
+
+检测手中物品
+启动action检测
+
 闪避
 
 ~~client触发action~~
@@ -27,10 +34,15 @@ action3阶段结束时清理实体?
 
 攻击
 
-根据actionHeadYaw由client发出射线检测实体
+* 生成碰撞箱检测
 
-气人值[^1]
+1. 创建action碰撞箱
+2. ~~遍历ClientWorld实体列表~~
+3. ~~检测实体列表碰撞箱~~
+4. 造成伤害
 
-[^1]: 故意的
+音效
 
-server确认攻击后发包到client client计算值
+client 闪避成功
+
+server 攻击 受击

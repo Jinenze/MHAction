@@ -3,7 +3,7 @@ package com.example.examplemod;
 import com.example.examplemod.config.ServerConfig;
 import com.example.examplemod.config.ServerConfigWrapper;
 import com.example.examplemod.init.ModActions;
-import com.example.examplemod.init.ModEntity;
+import com.example.examplemod.init.ModEntities;
 import com.example.examplemod.network.ServerNetwork;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
@@ -26,6 +26,6 @@ public class ExampleMod implements ModInitializer {
         AutoConfig.register(ServerConfigWrapper.class, PartitioningSerializer.wrap(GsonConfigSerializer::new));
         config = AutoConfig.getConfigHolder(ServerConfigWrapper.class).getConfig().server;
         ServerNetwork.register();
-        ModEntity.register();
+        ModEntities.register();
     }
 }

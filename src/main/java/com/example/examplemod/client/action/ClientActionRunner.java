@@ -21,13 +21,14 @@ public class ClientActionRunner {
     private static int cooldown;
     private static int inputTime;
     private static int stopTime;
+    private static int actionAge;
     private static int actionStage = 1;
     private static boolean actionRunning;
     public static float actionHeadYaw;
     public static float actionBodyYaw;
     @Nullable
     private static AbstractAction runningAction;
-    public static ClientPlayerEntity player;
+    private static ClientPlayerEntity player;
     private static final ArrayList<AbstractAction> Actions = new ArrayList<>();
 
     public static void actionTick() {
@@ -53,6 +54,7 @@ public class ClientActionRunner {
                 if (stopTime > 0) {
                     --stopTime;
                 } else {
+                    actionAge = 0;
                     actionStage = 1;
                     actionRunning = false;
                     runningAction = null;
@@ -60,7 +62,8 @@ public class ClientActionRunner {
                 break;
         }
         if (actionRunning) {
-            runningAction.onClientTick();
+            ++actionAge;
+            runningAction.onClientTick(player);
         }
     }
 
@@ -100,7 +103,14 @@ public class ClientActionRunner {
         actionBodyYaw = player.getBodyYaw();
         actionRunning = true;
         actionStage = 1;
-        action.run();
+        action.clientInit(player);
+    }
+
+    public static void tickPlayerYaw() {
+        if (actionRunning) {
+            player.headYaw = ClientActionRunner.actionHeadYaw;
+            player.bodyYaw = ClientActionRunner.actionBodyYaw;
+        }
     }
 
     public static void register(AbstractAction action, KeyBinding key, Identifier actionAnim) {
@@ -117,17 +127,21 @@ public class ClientActionRunner {
         Actions.add(action);
     }
 
-    public static int getActionStage() {
+    public static int getAge() {
+        return actionAge;
+    }
+
+    public static int getStage() {
         return actionStage;
     }
 
-    public static boolean isActionRunning() {
+    public static boolean isRunning() {
         return actionRunning;
     }
 
     public static void actionAttackCallBack() {
         if (runningAction != null) {
-            runningAction.attacked();
+            runningAction.attacked(player);
         }
     }
 }

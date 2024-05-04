@@ -5,7 +5,7 @@ import com.example.examplemod.config.ClientConfig;
 import com.example.examplemod.config.ClientConfigWrapper;
 import com.example.examplemod.entity.renderer.TempleEntityRenderer;
 import com.example.examplemod.init.ModAnimations;
-import com.example.examplemod.init.ModEntity;
+import com.example.examplemod.init.ModEntities;
 import com.example.examplemod.init.ModKeyBinds;
 import com.example.examplemod.client.input.KeyBind;
 import com.example.examplemod.network.ClientNetwork;
@@ -26,16 +26,13 @@ public class ExampleModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
-            if (ClientActionRunner.isActionRunning()) {
-                ClientActionRunner.player.headYaw = ClientActionRunner.actionHeadYaw;
-                ClientActionRunner.player.bodyYaw = ClientActionRunner.actionBodyYaw;
-            }
+            ClientActionRunner.tickPlayerYaw();
         });
         ClientTickEvents.START_WORLD_TICK.register((client) -> {
             KeyBind.keyBindTick();
             ClientActionRunner.actionTick();
         });
-        EntityRendererRegistry.register(ModEntity.TEMPLE, TempleEntityRenderer::new);
+        EntityRendererRegistry.register(ModEntities.TEMPLE, TempleEntityRenderer::new);
         AutoConfig.register(ClientConfigWrapper.class, PartitioningSerializer.wrap(GsonConfigSerializer::new));
         config = AutoConfig.getConfigHolder(ClientConfigWrapper.class).getConfig().client;
         PlayerAnimationAccess.REGISTER_ANIMATION_EVENT.register(ModAnimations::register);
