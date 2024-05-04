@@ -8,12 +8,11 @@ import java.util.List;
 
 public class ActionHitBox {
     public static List<Entity> intersects(ClientPlayerEntity player, Box box) {
-        List<Entity> entities = player
+        return player
                 .getWorld()
                 .getOtherEntities(player, box, entity -> !entity.isSpectator() && entity.canHit())
                 .stream()
                 .filter(entity -> entity != player && entity.isAttackable())
                 .toList();
-        return entities;
     }
 }
