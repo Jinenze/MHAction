@@ -29,8 +29,11 @@ public class ExampleModClient implements ClientModInitializer {
             ClientActionRunner.tickPlayerYaw();
         });
         ClientTickEvents.START_WORLD_TICK.register((client) -> {
-            KeyBind.keyBindTick();
-            ClientActionRunner.actionTick();
+            KeyBind.tickSwitch();
+            if (KeyBind.isEnabled()) {
+                KeyBind.keyBindTick();
+                ClientActionRunner.actionTick();
+            }
         });
         EntityRendererRegistry.register(ModEntities.TEMPLE, TempleEntityRenderer::new);
         AutoConfig.register(ClientConfigWrapper.class, PartitioningSerializer.wrap(GsonConfigSerializer::new));

@@ -18,53 +18,62 @@ import java.util.ArrayList;
 
 @Environment(EnvType.CLIENT)
 public class ClientActionRunner {
-    private static int cooldown;
-    private static int inputTime;
-    private static int stopTime;
+    //    private static int cooldown;
+//    private static int inputTime;
+//    private static int stopTime;
+//    private static int actionStage = 1;
+    private static int length;
     private static int actionAge;
-    private static int actionStage = 1;
-    private static boolean actionRunning;
     public static float actionHeadYaw;
     public static float actionBodyYaw;
+    private static boolean canPlayerInput;
     @Nullable
     private static AbstractAction runningAction;
     private static ClientPlayerEntity player;
+    @Nullable
+    private static ClientActionTick tickRunnable;
     private static final ArrayList<AbstractAction> Actions = new ArrayList<>();
 
     public static void actionTick() {
-        switch (actionStage) {
-            case 1:
-                if (!actionRunning) {
-                    break;
-                }
-                if (cooldown > 0) {
-                    --cooldown;
-                    break;
-                } else {
-                    actionStage = 2;
-                }
-            case 2:
-                if (inputTime > 0) {
-                    --inputTime;
-                    break;
-                } else {
-                    actionStage = 3;
-                }
-            case 3:
-                if (stopTime > 0) {
-                    --stopTime;
-                } else {
-                    actionAge = 0;
-                    actionStage = 1;
-                    actionRunning = false;
-                    runningAction = null;
-                }
-                break;
-        }
-        if (actionRunning) {
+        if (runningAction != null) {
             ++actionAge;
-            runningAction.onClientTick(player);
+            runningAction.onClientTick(actionAge);
+            if (tickRunnable != null) {
+                tickRunnable.run(player);
+            }
+            if (actionAge == length) {
+                runningAction = null;
+            }
         }
+//        switch (actionStage) {
+//            case 1:
+//                if (!actionRunning) {
+//                    break;
+//                }
+//                if (cooldown > 0) {
+//                    --cooldown;
+//                    break;
+//                } else {
+//                    actionStage = 2;
+//                }
+//            case 2:
+//                if (inputTime > 0) {
+//                    --inputTime;
+//                    break;
+//                } else {
+//                    actionStage = 3;
+//                }
+//            case 3:
+//                if (stopTime > 0) {
+//                    --stopTime;
+//                } else {
+//                    actionAge = 0;
+//                    actionStage = 1;
+//                    actionRunning = false;
+//                    runningAction = null;
+//                }
+//                break;
+//        }
     }
 
     public static void searchAction(KeyBinding lastKey, KeyBinding key) {
@@ -80,7 +89,7 @@ public class ClientActionRunner {
         if (action == runningAction) {
             return;
         }
-        if (!actionRunning || actionStage == 2) {
+        if (runningAction == null || canPlayerInput) {
             if (runningAction != null) {
                 if (runningAction.isAvailable(action) && action.isAvailable()) {
                     runAction(action);
@@ -92,22 +101,20 @@ public class ClientActionRunner {
     }
 
     public static void runAction(AbstractAction action) {
-        runningAction = action;
-        cooldown = action.getStage1();
-        inputTime = action.getStage2();
-        stopTime = action.getStage3();
-        int length = (cooldown + inputTime + stopTime);
-        ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(ModAnimations.mainAnim)).replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(length, (modelName, type, value) -> value), new KeyframeAnimationPlayer(action.getActionAnim()), actionRunning);
+        length = action.getLength();
+        ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(ModAnimations.mainAnim)).replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(length, (modelName, type, value) -> value), new KeyframeAnimationPlayer(action.getActionAnim()), runningAction != null);
         player = MinecraftClient.getInstance().player;
         actionHeadYaw = player.getHeadYaw();
         actionBodyYaw = player.getBodyYaw();
-        actionRunning = true;
-        actionStage = 1;
+        runningAction = action;
+        actionAge = 0;
+        tickRunnable = null;
+        canPlayerInput = false;
         action.clientInit(player);
     }
 
     public static void tickPlayerYaw() {
-        if (actionRunning) {
+        if (runningAction != null) {
             player.headYaw = ClientActionRunner.actionHeadYaw;
             player.bodyYaw = ClientActionRunner.actionBodyYaw;
         }
@@ -127,21 +134,21 @@ public class ClientActionRunner {
         Actions.add(action);
     }
 
-    public static int getAge() {
-        return actionAge;
-    }
-
-    public static int getStage() {
-        return actionStage;
-    }
-
     public static boolean isRunning() {
-        return actionRunning;
+        return runningAction != null;
     }
 
     public static void actionAttackCallBack() {
         if (runningAction != null) {
             runningAction.attacked(player);
         }
+    }
+
+    public static void setTick(ClientActionTick tickRunnable) {
+        ClientActionRunner.tickRunnable = tickRunnable;
+    }
+
+    public interface ClientActionTick {
+        void run(ClientPlayerEntity player);
     }
 }

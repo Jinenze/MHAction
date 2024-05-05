@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class TempleEntity extends LivingEntity implements Ownable {
-    private static final int DESPAWN_AGE = 200;
+    private static final int discardTime = 200;
     //        private UUID ownerUuid;
     private Entity owner;
 
@@ -64,7 +64,7 @@ public class TempleEntity extends LivingEntity implements Ownable {
     @Override
     public void tick() {
         ++this.age;
-        if (age > DESPAWN_AGE) {
+        if (age > discardTime) {
             this.discard();
         }
     }
@@ -96,8 +96,9 @@ public class TempleEntity extends LivingEntity implements Ownable {
 //        }
 //    }
 
-    public void setOwner(Entity owner) {
+    public TempleEntity setOwner(Entity owner) {
         this.owner = owner;
+        return this;
     }
 
     @Override

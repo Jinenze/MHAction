@@ -5,7 +5,6 @@ import com.example.examplemod.action.AbstractAction;
 import com.example.examplemod.action.AttackAction;
 import com.example.examplemod.client.action.ActionHitBox;
 import com.example.examplemod.client.action.ClientActionRunner;
-import com.example.examplemod.config.ServerConfig;
 import com.example.examplemod.network.Packets;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -35,21 +34,35 @@ public class Dodge extends AbstractAction implements AttackAction {
 
     @Environment(EnvType.CLIENT)
     @Override
-    public void onClientTick(ClientPlayerEntity player) {
-        if (ClientActionRunner.getStage() == 1) {
-            player.setVelocity(new Vec3d(-Math.sin(Math.toRadians(ClientActionRunner.actionHeadYaw)), 0, Math.cos(Math.toRadians(ClientActionRunner.actionHeadYaw))));
-        }
-        if (ClientActionRunner.getAge() == 6) {
-           for (Entity entity :ActionHitBox.intersects(player, this.getHitBox(player))){
-               int id = entity.getId();
-               ExampleMod.LOGGER.info(String.valueOf(id));
-           }
+    public void onClientTick(int tick) {
+        switch (tick) {
+            case 1:
+                ClientActionRunner.setTick((player) -> {
+                    player.setVelocity(new Vec3d(-Math.sin(Math.toRadians(ClientActionRunner.actionHeadYaw)), 0, Math.cos(Math.toRadians(ClientActionRunner.actionHeadYaw))));
+                });
+                break;
+            case 6:
+                ClientActionRunner.setTick((player) -> {
+                    for (Entity entity : ActionHitBox.intersects(player, this.getHitBox(player))) {
+                        int id = entity.getId();
+                        ExampleMod.LOGGER.info(String.valueOf(id));
+                    }
+                    ClientPlayNetworking.send(Packets.ActionDiscardRequest.ID, new Packets.ActionDiscardRequest().write());
+                });
+                break;
+            case 7:
+                ClientActionRunner.setTick(null);
         }
     }
 
     @Override
     public void attacked(PlayerEntity player) {
         ExampleMod.LOGGER.info("OHHHHHHHHHHHHHHH");
+
+    }
+
+    public Dodge(int time, AbstractAction... availableAction) {
+        super(time, availableAction);
     }
 
     @Environment(EnvType.CLIENT)
@@ -58,9 +71,6 @@ public class Dodge extends AbstractAction implements AttackAction {
         return MinecraftClient.getInstance().player.isOnGround();
     }
 
-    public Dodge(ServerConfig.ActionTimeConfig config, AbstractAction... availableAction) {
-        super(config, availableAction);
-    }
 
     @Override
     public Box getHitBox(ClientPlayerEntity player) {

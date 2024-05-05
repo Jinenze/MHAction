@@ -14,6 +14,9 @@ public class ServerNetwork {
         ServerPlayNetworking.registerGlobalReceiver(Packets.ActionSpawnRequest.ID, (server, player, handler, buf, responseSender) -> {
             ServerActionRunner.spawnActionEntity(player, Packets.ActionSpawnRequest.read(buf));
         });
+        ServerPlayNetworking.registerGlobalReceiver(Packets.ActionDiscardRequest.ID, (server, player, handler, buf, responseSender) -> {
+            ServerActionRunner.discardActionEntity(player);
+        });
     }
     public static void sendActionCallback(ServerPlayerEntity player){
         ServerPlayNetworking.getSender(player).sendPacket(Packets.ActionCallback.ID,new Packets.ActionCallback().write());

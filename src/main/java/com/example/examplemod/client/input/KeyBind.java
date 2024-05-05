@@ -1,6 +1,7 @@
 package com.example.examplemod.client.input;
 
 import com.example.examplemod.client.action.ClientActionRunner;
+import com.example.examplemod.init.ModKeyBinds;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.option.KeyBinding;
@@ -16,6 +17,7 @@ public class KeyBind {
     @Nullable
     private static KeyBinding key;
     private static int tickCount;
+    private static boolean enabled = true;
 
     public static KeyBinding register(KeyBinding key) {
         keyList.add(key);
@@ -46,5 +48,15 @@ public class KeyBind {
 
     public static void setTickCount(int c) {
         tickCount = c;
+    }
+
+    public static void tickSwitch(){
+        if (ModKeyBinds.SWITCH_KEY.isPressed()){
+            enabled = !enabled;
+        }
+    }
+
+    public static boolean isEnabled() {
+        return enabled;
     }
 }
