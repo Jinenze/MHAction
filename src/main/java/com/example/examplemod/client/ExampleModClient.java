@@ -30,14 +30,14 @@ public class ExampleModClient implements ClientModInitializer {
         });
         ClientTickEvents.START_WORLD_TICK.register((client) -> {
             KeyBind.tickSwitch();
-            if (KeyBind.isEnabled()) {
+            ClientActionRunner.actionTick();
+            if (KeyBind.isEnabled() && ClientActionRunner.isMainHandSword()) {
                 KeyBind.keyBindTick();
-                ClientActionRunner.actionTick();
             }
         });
-        EntityRendererRegistry.register(ModEntities.TEMPLE, TempleEntityRenderer::new);
         AutoConfig.register(ClientConfigWrapper.class, PartitioningSerializer.wrap(GsonConfigSerializer::new));
         config = AutoConfig.getConfigHolder(ClientConfigWrapper.class).getConfig().client;
+        EntityRendererRegistry.register(ModEntities.TEMPLE, TempleEntityRenderer::new);
         PlayerAnimationAccess.REGISTER_ANIMATION_EVENT.register(ModAnimations::register);
         ClientNetwork.register();
         ModKeyBinds.register();
