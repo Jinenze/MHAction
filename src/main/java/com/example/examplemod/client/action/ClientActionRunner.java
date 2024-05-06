@@ -18,10 +18,6 @@ import java.util.ArrayList;
 
 @Environment(EnvType.CLIENT)
 public class ClientActionRunner {
-    //    private static int cooldown;
-//    private static int inputTime;
-//    private static int stopTime;
-//    private static int actionStage = 1;
     private static int length;
     private static int actionAge;
     public static float actionHeadYaw;
@@ -43,37 +39,9 @@ public class ClientActionRunner {
             }
             if (actionAge == length) {
                 runningAction = null;
+                tickRunnable = null;
             }
         }
-//        switch (actionStage) {
-//            case 1:
-//                if (!actionRunning) {
-//                    break;
-//                }
-//                if (cooldown > 0) {
-//                    --cooldown;
-//                    break;
-//                } else {
-//                    actionStage = 2;
-//                }
-//            case 2:
-//                if (inputTime > 0) {
-//                    --inputTime;
-//                    break;
-//                } else {
-//                    actionStage = 3;
-//                }
-//            case 3:
-//                if (stopTime > 0) {
-//                    --stopTime;
-//                } else {
-//                    actionAge = 0;
-//                    actionStage = 1;
-//                    actionRunning = false;
-//                    runningAction = null;
-//                }
-//                break;
-//        }
     }
 
     public static void searchAction(KeyBinding lastKey, KeyBinding key) {

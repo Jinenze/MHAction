@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import static net.minecraft.entity.SpawnReason.COMMAND;
 
 public class ServerActionRunner {
-    private static ArrayList<TempleEntity> entities = new ArrayList<>();
+    private static final ArrayList<TempleEntity> entities = new ArrayList<>();
 
     public static void spawnActionEntity(ServerPlayerEntity player, BlockPos pos) {
         entities.add(ModEntities.TEMPLE.spawn(player.getServerWorld(), pos, COMMAND).setOwner(player));

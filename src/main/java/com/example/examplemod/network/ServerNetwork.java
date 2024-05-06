@@ -18,7 +18,8 @@ public class ServerNetwork {
             ServerActionRunner.discardActionEntity(player);
         });
     }
-    public static void sendActionCallback(ServerPlayerEntity player){
-        ServerPlayNetworking.getSender(player).sendPacket(Packets.ActionCallback.ID,new Packets.ActionCallback().write());
+
+    public static void sendActionCallback(ServerPlayerEntity player) {
+        ServerPlayNetworking.getSender(player).sendPacket(Packets.ActionCallback.ID, new Packets.ActionCallback().write());
     }
 }

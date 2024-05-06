@@ -5,10 +5,9 @@ import com.example.examplemod.action.AbstractAction;
 import com.example.examplemod.action.AttackAction;
 import com.example.examplemod.client.action.ActionHitBox;
 import com.example.examplemod.client.action.ClientActionRunner;
-import com.example.examplemod.network.Packets;
+import com.example.examplemod.network.ClientNetwork;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
@@ -29,7 +28,7 @@ public class Dodge extends AbstractAction implements AttackAction {
                 ClientActionRunner.actionHeadYaw += input.y == 1.0f ? 45f : 90f;
                 break;
         }
-        ClientPlayNetworking.send(Packets.ActionSpawnRequest.ID, new Packets.ActionSpawnRequest(player.getBlockPos()).write());
+        ClientNetwork.sendSpawnRequest(player);
     }
 
     @Environment(EnvType.CLIENT)
@@ -47,7 +46,7 @@ public class Dodge extends AbstractAction implements AttackAction {
                         int id = entity.getId();
                         ExampleMod.LOGGER.info(String.valueOf(id));
                     }
-                    ClientPlayNetworking.send(Packets.ActionDiscardRequest.ID, new Packets.ActionDiscardRequest().write());
+                    ClientNetwork.sendDiscardRequest();
                 });
                 break;
             case 7:

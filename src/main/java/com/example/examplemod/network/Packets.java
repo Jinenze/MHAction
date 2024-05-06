@@ -40,6 +40,7 @@ public class Packets {
             return PacketByteBufs.empty();
         }
     }
+
     public static class ActionDiscardRequest {
         public static final Identifier ID = new Identifier(ExampleMod.MODID, "discard_request");
 

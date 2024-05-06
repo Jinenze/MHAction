@@ -50,8 +50,8 @@ public class KeyBind {
         tickCount = c;
     }
 
-    public static void tickSwitch(){
-        if (ModKeyBinds.SWITCH_KEY.isPressed()){
+    public static void tickSwitch() {
+        if (ModKeyBinds.SWITCH_KEY.isPressed()) {
             enabled = !enabled;
         }
     }
