@@ -1,6 +1,5 @@
 package com.example.examplemod.client.action;
 
-import com.example.examplemod.ExampleMod;
 import com.example.examplemod.action.AbstractAction;
 import com.example.examplemod.action.AttackAction;
 import com.example.examplemod.init.ModAnimations;
@@ -15,7 +14,6 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.SwordItem;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec2f;
@@ -23,7 +21,6 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class ClientActionRunner {
