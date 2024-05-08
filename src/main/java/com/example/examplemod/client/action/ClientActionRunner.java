@@ -3,6 +3,7 @@ package com.example.examplemod.client.action;
 import com.example.examplemod.action.AbstractAction;
 import com.example.examplemod.action.AttackAction;
 import com.example.examplemod.init.ModAnimations;
+import com.example.examplemod.network.ClientNetwork;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
 import dev.kosmx.playerAnim.api.layered.ModifierLayer;
@@ -82,6 +83,7 @@ public class ClientActionRunner {
         tickRunnable = null;
         canPlayerInput = false;
         action.clientInit(player);
+        ClientNetwork.sendStartRequest(action);
     }
 
     public static void tickPlayerYaw() {

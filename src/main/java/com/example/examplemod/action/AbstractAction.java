@@ -1,5 +1,6 @@
 package com.example.examplemod.action;
 
+import com.example.examplemod.ExampleMod;
 import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import net.fabricmc.api.EnvType;
@@ -7,15 +8,18 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
 public abstract class AbstractAction {
+    public final Identifier ID;
     private final int length;
     private KeyBinding[] actionKey;
     private Identifier actionAnim;
     private final AbstractAction[] availableAction;
 
-    public AbstractAction(int length, AbstractAction... availableAction) {
+    public AbstractAction(String ID, int length, AbstractAction... availableAction) {
+        this.ID = new Identifier(ExampleMod.MODID, ID);
         this.length = length;
         this.availableAction = availableAction;
     }
@@ -68,5 +72,13 @@ public abstract class AbstractAction {
     @Environment(EnvType.CLIENT)
     public void setActionAnim(Identifier actionAnim) {
         this.actionAnim = actionAnim;
+    }
+
+    public SoundEvent getStartSound() {
+        return null;
+    }
+
+    public SoundEvent getEndSound() {
+        return null;
     }
 }

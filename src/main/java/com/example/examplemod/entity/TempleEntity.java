@@ -39,7 +39,7 @@ public class TempleEntity extends LivingEntity implements Ownable {
         World world = this.getWorld();
         if (world instanceof ServerWorld && (ExampleMod.config.player_attack_collect || !(source.getAttacker() instanceof ServerPlayerEntity))) {
             ServerNetwork.sendActionCallback((ServerPlayerEntity) owner);
-            world.playSound( null, this.getBlockPos(), SoundEvents.BLOCK_BELL_USE , SoundCategory.BLOCKS);
+            world.playSound( null, this.getBlockPos(), SoundEvents.BLOCK_BELL_USE , SoundCategory.PLAYERS);
             this.discard();
         }
         return false;

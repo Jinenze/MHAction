@@ -11,6 +11,9 @@ public class ServerNetwork {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             sender.sendPacket(Packets.ServerConfigPacket.ID, new Packets.ServerConfigPacket(ExampleMod.config).write());
         });
+        ServerPlayNetworking.registerGlobalReceiver(Packets.ActionStartRequest.ID, (server, player, handler, buf, responseSender) -> {
+            ServerActionRunner.startAction(player, Packets.ActionStartRequest.read(buf));
+        });
         ServerPlayNetworking.registerGlobalReceiver(Packets.ActionSpawnRequest.ID, (server, player, handler, buf, responseSender) -> {
             ServerActionRunner.spawnActionEntity(player, Packets.ActionSpawnRequest.read(buf));
         });

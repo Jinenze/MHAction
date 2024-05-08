@@ -1,6 +1,7 @@
 package com.example.examplemod.network;
 
 import com.example.examplemod.ExampleMod;
+import com.example.examplemod.action.AbstractAction;
 import com.example.examplemod.client.action.ClientActionRunner;
 import com.example.examplemod.init.ModActions;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -15,6 +16,9 @@ public class ClientNetwork {
         ClientPlayNetworking.registerGlobalReceiver(Packets.ActionCallback.ID, (client, handler, buf, responseSender) -> {
             ClientActionRunner.actionAttackCallBack();
         });
+    }
+    public static void sendStartRequest(AbstractAction action){
+        ClientPlayNetworking.send(Packets.ActionStartRequest.ID, new Packets.ActionStartRequest(action).write());
     }
 
     public static void sendSpawnRequest(ClientPlayerEntity player) {

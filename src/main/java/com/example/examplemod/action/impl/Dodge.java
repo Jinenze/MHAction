@@ -4,12 +4,14 @@ import com.example.examplemod.ExampleMod;
 import com.example.examplemod.action.AbstractAction;
 import com.example.examplemod.action.AttackAction;
 import com.example.examplemod.client.action.ClientActionRunner;
+import com.example.examplemod.init.ModSound;
 import com.example.examplemod.network.ClientNetwork;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.Box;
 
 public class Dodge extends AbstractAction implements AttackAction {
@@ -46,8 +48,8 @@ public class Dodge extends AbstractAction implements AttackAction {
 
     }
 
-    public Dodge(int time, AbstractAction... availableAction) {
-        super(time, availableAction);
+    public Dodge(String ID, int length, AbstractAction... availableAction) {
+        super(ID, length, availableAction);
     }
 
     @Environment(EnvType.CLIENT)
@@ -60,5 +62,10 @@ public class Dodge extends AbstractAction implements AttackAction {
     @Override
     public Box getHitBox(ClientPlayerEntity player) {
         return player.getBoundingBox().expand(1.0f);
+    }
+
+    @Override
+    public SoundEvent getStartSound() {
+        return ModSound.DODGE.START.soundEvent;
     }
 }
