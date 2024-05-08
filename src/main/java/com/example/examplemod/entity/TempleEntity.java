@@ -8,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Arm;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -34,8 +36,10 @@ public class TempleEntity extends LivingEntity implements Ownable {
 
     @Override
     public boolean damage(DamageSource source, float amount) {
-        if (this.getWorld() instanceof ServerWorld && !(ExampleMod.config.player_attack_collect && source.getAttacker() instanceof ServerPlayerEntity)) {
+        World world = this.getWorld();
+        if (world instanceof ServerWorld && (ExampleMod.config.player_attack_collect || !(source.getAttacker() instanceof ServerPlayerEntity))) {
             ServerNetwork.sendActionCallback((ServerPlayerEntity) owner);
+            world.playSound( null, this.getBlockPos(), SoundEvents.BLOCK_BELL_USE , SoundCategory.BLOCKS);
             this.discard();
         }
         return false;
