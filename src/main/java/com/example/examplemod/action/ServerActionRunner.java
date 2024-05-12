@@ -2,8 +2,7 @@ package com.example.examplemod.action;
 
 import com.example.examplemod.entity.TempleEntity;
 import com.example.examplemod.init.ModEntities;
-import com.example.examplemod.init.ModSound;
-import com.example.examplemod.item.ModSwordItem;
+import com.example.examplemod.item.ModSword;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -39,7 +38,7 @@ public class ServerActionRunner {
         for (int id : entityIds) {
             entity = player.getServerWorld().getEntityById(id);
             if (entity != null) {
-                ModSwordItem.attack(player, entity);
+                ModSword.attack(player, entity);
             }
         }
     }

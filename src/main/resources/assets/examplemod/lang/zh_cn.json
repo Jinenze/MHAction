@@ -4,7 +4,7 @@
   "key.examplemod.left": "左",
   "key.examplemod.dodge": "翻滚",
 
-  "item.example.katana": "刀",
+  "item.examplemod.katana": "刀",
 
   "text.autoconfig.examplemod.option.client.a" : "这是A"
 }
