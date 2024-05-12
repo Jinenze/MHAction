@@ -2,6 +2,9 @@ package com.example.examplemod.action;
 
 import com.example.examplemod.entity.TempleEntity;
 import com.example.examplemod.init.ModEntities;
+import com.example.examplemod.init.ModSound;
+import com.example.examplemod.item.ModSwordItem;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -13,9 +16,9 @@ import static net.minecraft.entity.SpawnReason.COMMAND;
 public class ServerActionRunner {
     private static final ArrayList<TempleEntity> entities = new ArrayList<>();
 
-    public static void startAction(ServerPlayerEntity player, AbstractAction action){
-        if(action != null){
-            player.getServerWorld().playSound( null, player.getBlockPos(), action.getStartSound() , SoundCategory.PLAYERS);
+    public static void startAction(ServerPlayerEntity player, AbstractAction action) {
+        if (action != null) {
+            player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(), action.getStartSound(), SoundCategory.PLAYERS);
         }
     }
 
@@ -27,6 +30,16 @@ public class ServerActionRunner {
         for (TempleEntity entity : entities) {
             if (entity.getOwner() == player) {
                 entity.discard();
+            }
+        }
+    }
+
+    public static void attack(ServerPlayerEntity player, int[] entityIds) {
+        Entity entity;
+        for (int id : entityIds) {
+            entity = player.getServerWorld().getEntityById(id);
+            if (entity != null) {
+                ModSwordItem.attack(player, entity);
             }
         }
     }

@@ -3,6 +3,7 @@ package com.example.examplemod.client.action;
 import com.example.examplemod.action.AbstractAction;
 import com.example.examplemod.action.AttackAction;
 import com.example.examplemod.init.ModAnimations;
+import com.example.examplemod.item.ModSword;
 import com.example.examplemod.network.ClientNetwork;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
@@ -13,9 +14,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.SwordItem;
-import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
@@ -109,16 +107,15 @@ public class ClientActionRunner {
 
     public static boolean isMainHandSword() {
         if (MinecraftClient.getInstance().player != null) {
-            return MinecraftClient.getInstance().player.getMainHandStack().isIn(ItemTags.SWORDS);
+//            return MinecraftClient.getInstance().player.getMainHandStack().isIn(ItemTags.SWORDS);
+            return MinecraftClient.getInstance().player.getMainHandStack().getItem() instanceof ModSword;
         }
         return false;
     }
 
     public static void attack() {
         if (runningAction instanceof AttackAction) {
-            for (Entity entity : ActionHitBox.intersects(player, ((AttackAction) runningAction).getHitBox(player))) {
-                entity.damage(player.getDamageSources().playerAttack(player), ((SwordItem) player.getMainHandStack().getItem()).getAttackDamage());
-            }
+            ClientNetwork.sendAttackRequest(ActionHitBox.intersects(player, ((AttackAction) runningAction).getHitBox(player)));
         }
     }
 

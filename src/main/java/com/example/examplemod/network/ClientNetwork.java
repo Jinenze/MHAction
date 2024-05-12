@@ -6,6 +6,9 @@ import com.example.examplemod.client.action.ClientActionRunner;
 import com.example.examplemod.init.ModActions;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.Entity;
+
+import java.util.List;
 
 public class ClientNetwork {
     public static void register() {
@@ -17,7 +20,12 @@ public class ClientNetwork {
             ClientActionRunner.actionAttackCallBack();
         });
     }
-    public static void sendStartRequest(AbstractAction action){
+
+    public static void sendAttackRequest(List<Entity> entities){
+        ClientPlayNetworking.send(Packets.AttackRequest.ID, new Packets.AttackRequest(entities).write());
+    }
+
+    public static void sendStartRequest(AbstractAction action) {
         ClientPlayNetworking.send(Packets.ActionStartRequest.ID, new Packets.ActionStartRequest(action).write());
     }
 

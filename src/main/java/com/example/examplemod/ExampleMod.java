@@ -4,6 +4,7 @@ import com.example.examplemod.config.ServerConfig;
 import com.example.examplemod.config.ServerConfigWrapper;
 import com.example.examplemod.init.ModActions;
 import com.example.examplemod.init.ModEntities;
+import com.example.examplemod.init.ModItems;
 import com.example.examplemod.init.ModSound;
 import com.example.examplemod.network.ServerNetwork;
 import me.shedaniel.autoconfig.AutoConfig;
@@ -29,5 +30,6 @@ public class ExampleMod implements ModInitializer {
         ServerNetwork.register();
         ModEntities.register();
         ModSound.register();
+        ModItems.register();
     }
 }

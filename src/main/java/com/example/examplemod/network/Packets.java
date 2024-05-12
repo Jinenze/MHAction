@@ -6,11 +6,30 @@ import com.example.examplemod.config.ServerConfig;
 import com.example.examplemod.init.ModActions;
 import com.google.gson.Gson;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.List;
+
 public class Packets {
+    public record AttackRequest(List<Entity> entities) {
+        public static final Identifier ID = new Identifier(ExampleMod.MODID, "attack_request");
+
+        public PacketByteBuf write() {
+            int[] entityIds = new int[entities.size()];
+            for (int i = 0; i < entities.size(); i++) {
+                entityIds[i] = entities.get(i).getId();
+            }
+            return PacketByteBufs.create().writeIntArray(entityIds);
+        }
+
+        public static int[] read(PacketByteBuf buffer) {
+            return buffer.readIntArray();
+        }
+    }
+
     public record ServerConfigPacket(ServerConfig config) {
         public static final Identifier ID = new Identifier(ExampleMod.MODID, "server_config");
 

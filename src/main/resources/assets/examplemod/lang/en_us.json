@@ -4,5 +4,7 @@
   "key.examplemod.left": "left",
   "key.examplemod.dodge": "dodge",
 
+  "item.example.katana": "sword",
+
   "text.autoconfig.examplemod.option.client.a" : "A"
 }
