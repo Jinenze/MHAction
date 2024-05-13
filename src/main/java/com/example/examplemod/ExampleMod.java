@@ -22,14 +22,12 @@ public class ExampleMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ServerLifecycleEvents.SERVER_STARTED.register((minecraftServer) -> {
-            ModActions.register();
-        });
         AutoConfig.register(ServerConfigWrapper.class, PartitioningSerializer.wrap(GsonConfigSerializer::new));
         config = AutoConfig.getConfigHolder(ServerConfigWrapper.class).getConfig().server;
         ServerNetwork.register();
-        ModEntities.register();
+        ModActions.register();
         ModSound.register();
+        ModEntities.register();
         ModItems.register();
     }
 }

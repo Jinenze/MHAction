@@ -1,13 +1,14 @@
 package com.example.examplemod.action;
 
 import com.example.examplemod.ExampleMod;
+import com.example.examplemod.client.action.ClientActionRunner;
 import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
@@ -16,28 +17,25 @@ public abstract class AbstractAction {
     private final int length;
     private KeyBinding[] actionKey;
     private Identifier actionAnim;
-    private final AbstractAction[] availableAction;
+    private AbstractAction[] availableAction;
 
-    public AbstractAction(String ID, int length, AbstractAction... availableAction) {
+    public AbstractAction(String ID, int length) {
         this.ID = new Identifier(ExampleMod.MODID, ID);
         this.length = length;
-        this.availableAction = availableAction;
     }
 
     @Environment(EnvType.CLIENT)
     public void clientInit(ClientPlayerEntity player) {
+        ClientActionRunner.actionYaw.playerInput(player);
     }
 
     @Environment(EnvType.CLIENT)
     public void onClientTick(int tick) {
     }
 
-    public void attacked(PlayerEntity player) {
-    }
-
     @Environment(EnvType.CLIENT)
     public boolean isAvailable() {
-        return true;
+        return MinecraftClient.getInstance().player.isOnGround();
     }
 
     @Environment(EnvType.CLIENT)
@@ -50,8 +48,9 @@ public abstract class AbstractAction {
         return false;
     }
 
-    public int getLength() {
-        return length;
+    @Environment(EnvType.CLIENT)
+    public void setAvailableAction(AbstractAction[] actions){
+        this.availableAction = actions;
     }
 
     @Environment(EnvType.CLIENT)
@@ -72,6 +71,10 @@ public abstract class AbstractAction {
     @Environment(EnvType.CLIENT)
     public void setActionAnim(Identifier actionAnim) {
         this.actionAnim = actionAnim;
+    }
+
+    public int getLength() {
+        return length;
     }
 
     public SoundEvent getStartSound() {

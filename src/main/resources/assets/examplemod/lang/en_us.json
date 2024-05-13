@@ -1,7 +1,6 @@
 {
   "category.examplemod.examplemod": "example",
   "key.examplemod.switch": "switch",
-  "key.examplemod.left": "left",
   "key.examplemod.dodge": "dodge",
 
   "item.examplemod.katana": "sword",

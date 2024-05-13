@@ -1,7 +1,9 @@
 package com.example.examplemod.client.action;
 
+import com.example.examplemod.ExampleMod;
 import com.example.examplemod.action.AbstractAction;
 import com.example.examplemod.action.AttackAction;
+import com.example.examplemod.action.CounterAction;
 import com.example.examplemod.init.ModAnimations;
 import com.example.examplemod.item.ModSword;
 import com.example.examplemod.network.ClientNetwork;
@@ -14,32 +16,36 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
 public class ClientActionRunner {
     private static int length;
     private static int actionAge;
     public static ActionYaw actionYaw;
-    private static boolean canPlayerInput;
+    private static boolean canPlayerAction = true;
     @Nullable
     private static AbstractAction runningAction;
     private static ClientPlayerEntity player;
     @Nullable
-    private static ClientActionTick tickRunnable;
+    private static Consumer<ClientPlayerEntity> tickRunnable;
     private static final ArrayList<AbstractAction> Actions = new ArrayList<>();
+    private static final ArrayList<AbstractAction> defaultActions = new ArrayList<>();
 
     public static void actionTick() {
         if (runningAction != null) {
             ++actionAge;
             runningAction.onClientTick(actionAge);
             if (tickRunnable != null) {
-                tickRunnable.run(player);
+                tickRunnable.accept(player);
             }
             if (actionAge == length) {
                 reset();
@@ -60,12 +66,12 @@ public class ClientActionRunner {
         if (action == runningAction) {
             return;
         }
-        if (runningAction == null || canPlayerInput) {
+        if (canPlayerAction && action.isAvailable()) {
             if (runningAction != null) {
-                if (runningAction.isAvailable(action) && action.isAvailable()) {
+                if (runningAction.isAvailable(action)) {
                     runAction(action);
                 }
-            } else if (action.isAvailable()) {
+            } else if (isInDefaultAction(action)) {
                 runAction(action);
             }
         }
@@ -79,9 +85,10 @@ public class ClientActionRunner {
         runningAction = action;
         actionAge = 0;
         tickRunnable = null;
-        canPlayerInput = false;
+        canPlayerAction = false;
         action.clientInit(player);
         ClientNetwork.sendStartRequest(action);
+        ExampleMod.LOGGER.info(runningAction.ID.toString());
     }
 
     public static void tickPlayerYaw() {
@@ -91,17 +98,18 @@ public class ClientActionRunner {
         }
     }
 
-    public static void register(AbstractAction action, KeyBinding key, Identifier actionAnim) {
+    public static void register(AbstractAction action, KeyBinding key, Identifier actionAnim, AbstractAction... availableAction) {
         KeyBinding[] k = {null, key};
         action.setActionKey(k);
         action.setActionAnim(actionAnim);
         Actions.add(action);
     }
 
-    public static void register(AbstractAction action, KeyBinding lastKey, KeyBinding key, Identifier actionAnim) {
+    public static void register(AbstractAction action, KeyBinding lastKey, KeyBinding key, Identifier actionAnim, AbstractAction... availableAction) {
         KeyBinding[] k = {lastKey, key};
         action.setActionKey(k);
         action.setActionAnim(actionAnim);
+        action.setAvailableAction(availableAction);
         Actions.add(action);
     }
 
@@ -114,8 +122,12 @@ public class ClientActionRunner {
     }
 
     public static void attack() {
-        if (runningAction instanceof AttackAction) {
-            ClientNetwork.sendAttackRequest(ActionHitBox.intersects(player, ((AttackAction) runningAction).getHitBox(player)));
+        if (runningAction instanceof AttackAction action) {
+            List<Entity> entities = ActionHitBox.intersects(player, action.getHitBox(player));
+            for (Entity entity : entities) {
+                action.hit(player);
+            }
+            ClientNetwork.sendAttackRequest(entities);
         }
     }
 
@@ -124,28 +136,37 @@ public class ClientActionRunner {
     }
 
     public static void actionAttackCallBack() {
-        if (runningAction != null) {
-            runningAction.attacked(player);
+        if (runningAction instanceof CounterAction action) {
+            action.attacked(player);
         }
     }
 
-    public static void setTick(ClientActionTick tickRunnable) {
+    public static void setTick(Consumer<ClientPlayerEntity> tickRunnable) {
         ClientActionRunner.tickRunnable = tickRunnable;
     }
 
     //比setTick里的先运行
-    public static void run(ClientActionTick tickRunnable) {
-        tickRunnable.run(player);
+    public static void run(Consumer<ClientPlayerEntity> tickRunnable) {
+        tickRunnable.accept(player);
+    }
+
+    public static void addDefaultAction(AbstractAction action){
+        defaultActions.add(action);
+    }
+
+    private static boolean isInDefaultAction(AbstractAction action){
+        for (AbstractAction a : defaultActions) {
+            if (a == action) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void reset() {
-        canPlayerInput = false;
+        canPlayerAction = true;
         runningAction = null;
         tickRunnable = null;
-    }
-
-    public interface ClientActionTick {
-        void run(ClientPlayerEntity player);
     }
 
     public static class ActionYaw {

@@ -1,7 +1,6 @@
 {
   "category.examplemod.examplemod": "example",
   "key.examplemod.switch": "开关",
-  "key.examplemod.left": "左",
   "key.examplemod.dodge": "翻滚",
 
   "item.examplemod.katana": "刀",
