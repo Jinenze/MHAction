@@ -102,6 +102,7 @@ public class ClientActionRunner {
         KeyBinding[] k = {null, key};
         action.setActionKey(k);
         action.setActionAnim(actionAnim);
+        action.setAvailableAction(availableAction);
         Actions.add(action);
     }
 
