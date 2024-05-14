@@ -18,12 +18,12 @@ public class ClientPlayerMixin implements PlayerGauge {
 
     @Override
     public int getSpiritGauge() {
-        gaugeTick = 600;
         return spiritGauge;
     }
 
     @Override
     public void setSpiritGauge(int spiritGauge) {
+        gaugeTick = 600;
         this.spiritGauge = spiritGauge;
     }
 
