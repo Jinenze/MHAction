@@ -1,6 +1,7 @@
 package com.example.examplemod.client;
 
 import com.example.examplemod.client.action.ClientActionRunner;
+import com.example.examplemod.client.render.ModelSwapper;
 import com.example.examplemod.config.ClientConfig;
 import com.example.examplemod.config.ClientConfigWrapper;
 import com.example.examplemod.entity.renderer.TempleEntityRenderer;
@@ -22,6 +23,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 
 @Environment(EnvType.CLIENT)
 public class ExampleModClient implements ClientModInitializer {
+    public static final ModelSwapper MODEL_SWAPPER = new ModelSwapper();
+
     public static ClientConfig config;
 
     @Override
@@ -41,7 +44,11 @@ public class ExampleModClient implements ClientModInitializer {
         });
         AutoConfig.register(ClientConfigWrapper.class, PartitioningSerializer.wrap(GsonConfigSerializer::new));
         config = AutoConfig.getConfigHolder(ClientConfigWrapper.class).getConfig().client;
+
+        MODEL_SWAPPER.registerListeners();
+
         EntityRendererRegistry.register(ModEntities.TEMPLE, TempleEntityRenderer::new);
+
         PlayerAnimationAccess.REGISTER_ANIMATION_EVENT.register(ModAnimations::register);
         ClientNetwork.register();
         ModKeyBinds.register();

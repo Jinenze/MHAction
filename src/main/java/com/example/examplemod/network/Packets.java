@@ -1,7 +1,7 @@
 package com.example.examplemod.network;
 
 import com.example.examplemod.ExampleMod;
-import com.example.examplemod.action.AbstractAction;
+import com.example.examplemod.action.Action;
 import com.example.examplemod.config.ServerConfig;
 import com.example.examplemod.init.ModActions;
 import com.google.gson.Gson;
@@ -42,14 +42,14 @@ public class Packets {
         }
     }
 
-    public record ActionStartRequest(AbstractAction action) {
+    public record ActionStartRequest(Action action) {
         public static final Identifier ID = new Identifier(ExampleMod.MODID, "start_request");
 
         public PacketByteBuf write() {
             return PacketByteBufs.create().writeIdentifier(action.ID);
         }
 
-        public static AbstractAction read(PacketByteBuf buf) {
+        public static Action read(PacketByteBuf buf) {
             return ModActions.inList(buf.readIdentifier());
         }
     }

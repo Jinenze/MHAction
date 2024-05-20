@@ -8,5 +8,6 @@ import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 @Config(name = ExampleMod.MODID)
 public class ClientConfigWrapper extends PartitioningSerializer.GlobalData {
     @ConfigEntry.Category("client")
+    @ConfigEntry.Gui.TransitiveObject
     public ClientConfig client = new ClientConfig();
 }

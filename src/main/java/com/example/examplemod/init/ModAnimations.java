@@ -14,12 +14,16 @@ import net.minecraft.util.Identifier;
 public class ModAnimations {
     public static PlayerAnimationAccess.PlayerAssociatedAnimationData playerAssociatedAnimationData;
     public static final Identifier mainAnim = new Identifier(ExampleMod.MODID, "main_anim");
+    public static final Identifier subAnim = new Identifier(ExampleMod.MODID, "sub_anim");
     public static final Identifier DODGE = new Identifier(ExampleMod.MODID, "nmlgb");
 
     public static void register(AbstractClientPlayerEntity player, AnimationStack animationStack) {
-        ModifierLayer<IAnimation> layer = new ModifierLayer<>();
-        animationStack.addAnimLayer(10, layer);
         playerAssociatedAnimationData = PlayerAnimationAccess.getPlayerAssociatedData(player);
-        playerAssociatedAnimationData.set(mainAnim, layer);
+        ModifierLayer<IAnimation> layer = new ModifierLayer<>();
+        animationStack.addAnimLayer(1, layer);
+        playerAssociatedAnimationData.set(subAnim, layer);
+        ModifierLayer<IAnimation> layer1 = new ModifierLayer<>();
+        animationStack.addAnimLayer(2, layer1);
+        playerAssociatedAnimationData.set(mainAnim, layer1);
     }
 }

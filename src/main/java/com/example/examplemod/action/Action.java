@@ -12,14 +12,14 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
-public abstract class AbstractAction {
+public abstract class Action {
     public final Identifier ID;
     private final int length;
     private KeyBinding[] actionKey;
     private Identifier actionAnim;
-    private AbstractAction[] availableAction;
+    private Action[] availableAction;
 
-    public AbstractAction(String ID, int length) {
+    public Action(String ID, int length) {
         this.ID = new Identifier(ExampleMod.MODID, ID);
         this.length = length;
     }
@@ -39,8 +39,8 @@ public abstract class AbstractAction {
     }
 
     @Environment(EnvType.CLIENT)
-    public boolean isAvailable(AbstractAction action) {
-        for (AbstractAction a : availableAction) {
+    public boolean isAvailable(Action action) {
+        for (Action a : availableAction) {
             if (a == action) {
                 return true;
             }
@@ -49,7 +49,7 @@ public abstract class AbstractAction {
     }
 
     @Environment(EnvType.CLIENT)
-    public void setAvailableAction(AbstractAction[] actions){
+    public void setAvailableAction(Action[] actions){
         this.availableAction = actions;
     }
 

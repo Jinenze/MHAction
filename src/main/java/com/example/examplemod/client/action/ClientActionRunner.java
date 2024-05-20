@@ -1,16 +1,19 @@
 package com.example.examplemod.client.action;
 
 import com.example.examplemod.ExampleMod;
-import com.example.examplemod.action.AbstractAction;
+import com.example.examplemod.action.Action;
 import com.example.examplemod.action.AttackAction;
 import com.example.examplemod.action.CounterAction;
 import com.example.examplemod.init.ModAnimations;
 import com.example.examplemod.item.ModSword;
 import com.example.examplemod.network.ClientNetwork;
+import dev.kosmx.playerAnim.api.firstPerson.FirstPersonConfiguration;
+import dev.kosmx.playerAnim.api.firstPerson.FirstPersonMode;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
 import dev.kosmx.playerAnim.api.layered.ModifierLayer;
 import dev.kosmx.playerAnim.api.layered.modifier.AbstractFadeModifier;
+import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -33,12 +36,13 @@ public class ClientActionRunner {
     public static ActionYaw actionYaw;
     private static boolean canPlayerAction = true;
     @Nullable
-    private static AbstractAction runningAction;
+    private static Action runningAction;
     private static ClientPlayerEntity player;
     @Nullable
     private static Consumer<ClientPlayerEntity> tickRunnable;
-    private static final ArrayList<AbstractAction> Actions = new ArrayList<>();
-    private static final ArrayList<AbstractAction> defaultActions = new ArrayList<>();
+    private static KeyframeAnimation subAnimation;
+    private static final ArrayList<Action> Actions = new ArrayList<>();
+    private static final ArrayList<Action> defaultActions = new ArrayList<>();
 
     public static void actionTick() {
         if (runningAction != null) {
@@ -54,7 +58,7 @@ public class ClientActionRunner {
     }
 
     public static void searchAction(KeyBinding lastKey, KeyBinding key) {
-        for (AbstractAction a : Actions) {
+        for (Action a : Actions) {
             KeyBinding[] keys = a.getActionKey();
             if ((keys[0] == lastKey && keys[1] == key) || (keys[1] == lastKey && keys[0] == key)) {
                 isAvailableAction(a);
@@ -62,7 +66,7 @@ public class ClientActionRunner {
         }
     }
 
-    public static void isAvailableAction(AbstractAction action) {
+    public static void isAvailableAction(Action action) {
         if (action == runningAction) {
             return;
         }
@@ -77,9 +81,16 @@ public class ClientActionRunner {
         }
     }
 
-    public static void runAction(AbstractAction action) {
+    public static void runAction(Action action) {
         length = action.getLength();
-        ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(ModAnimations.mainAnim)).replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(length, (modelName, type, value) -> value), new KeyframeAnimationPlayer(action.getActionAnim()), runningAction != null);
+        var animationPlayer = new KeyframeAnimationPlayer(action.getActionAnim()).setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL).setFirstPersonConfiguration(new FirstPersonConfiguration());
+        ModifierLayer<IAnimation> layer = ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(ModAnimations.mainAnim));
+        layer.replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(length, (modelName, type, value) -> value), animationPlayer, runningAction != null);
+        if (subAnimation != null){
+            var animationPlayer1 = new KeyframeAnimationPlayer(subAnimation).setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL).setFirstPersonConfiguration(new FirstPersonConfiguration());
+            ModifierLayer<IAnimation> subLayer = ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(ModAnimations.subAnim));
+            subLayer.replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(length, (modelName, type, value) -> value), animationPlayer1, true);
+        }
         player = MinecraftClient.getInstance().player;
         actionYaw = new ActionYaw(player.getHeadYaw(), player.getBodyYaw());
         runningAction = action;
@@ -91,6 +102,14 @@ public class ClientActionRunner {
         ExampleMod.LOGGER.info(runningAction.ID.toString());
     }
 
+    public static KeyframeAnimation getSubAnimation() {
+        return subAnimation;
+    }
+
+    public static void setSubAnimation(KeyframeAnimation subAnimation) {
+        ClientActionRunner.subAnimation = subAnimation;
+    }
+
     public static void tickPlayerYaw() {
         if (runningAction != null) {
             player.headYaw = actionYaw.getHead();
@@ -98,7 +117,7 @@ public class ClientActionRunner {
         }
     }
 
-    public static void register(AbstractAction action, KeyBinding key, Identifier actionAnim, AbstractAction... availableAction) {
+    public static void register(Action action, KeyBinding key, Identifier actionAnim, Action... availableAction) {
         KeyBinding[] k = {null, key};
         action.setActionKey(k);
         action.setActionAnim(actionAnim);
@@ -106,7 +125,7 @@ public class ClientActionRunner {
         Actions.add(action);
     }
 
-    public static void register(AbstractAction action, KeyBinding lastKey, KeyBinding key, Identifier actionAnim, AbstractAction... availableAction) {
+    public static void register(Action action, KeyBinding lastKey, KeyBinding key, Identifier actionAnim, Action... availableAction) {
         KeyBinding[] k = {lastKey, key};
         action.setActionKey(k);
         action.setActionAnim(actionAnim);
@@ -151,17 +170,21 @@ public class ClientActionRunner {
         tickRunnable.accept(player);
     }
 
-    public static void addDefaultAction(AbstractAction action){
+    public static void addDefaultAction(Action action){
         defaultActions.add(action);
     }
 
-    private static boolean isInDefaultAction(AbstractAction action){
-        for (AbstractAction a : defaultActions) {
+    private static boolean isInDefaultAction(Action action){
+        for (Action a : defaultActions) {
             if (a == action) {
                 return true;
             }
         }
         return false;
+    }
+
+    public static void setCanPlayerAction(boolean canPlayerAction) {
+        ClientActionRunner.canPlayerAction = canPlayerAction;
     }
 
     public static void reset() {

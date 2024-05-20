@@ -25,6 +25,14 @@ public abstract class ModSwordItem extends Item implements ModSword {
         return true;
     }
 
+    public Item getSwordItem(){
+        return null;
+    }
+
+    public Item getSheathItem(){
+        return null;
+    }
+
     public ModSwordItem(Settings settings) {
         super(settings);
     }

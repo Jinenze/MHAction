@@ -1,7 +1,7 @@
 package com.example.examplemod.action.impl;
 
 import com.example.examplemod.ExampleMod;
-import com.example.examplemod.action.AbstractAction;
+import com.example.examplemod.action.Action;
 import com.example.examplemod.action.CounterAction;
 import com.example.examplemod.client.action.ClientActionRunner;
 import com.example.examplemod.init.ModSound;
@@ -11,7 +11,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundEvent;
 
-public class Dodge extends AbstractAction implements CounterAction {
+public class Dodge extends Action implements CounterAction {
     @Environment(EnvType.CLIENT)
     @Override
     public void onClientTick(int tick) {

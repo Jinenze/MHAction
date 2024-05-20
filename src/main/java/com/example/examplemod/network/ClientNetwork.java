@@ -1,7 +1,7 @@
 package com.example.examplemod.network;
 
 import com.example.examplemod.ExampleMod;
-import com.example.examplemod.action.AbstractAction;
+import com.example.examplemod.action.Action;
 import com.example.examplemod.client.action.ClientActionRunner;
 import com.example.examplemod.init.ModActions;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -25,7 +25,7 @@ public class ClientNetwork {
         ClientPlayNetworking.send(Packets.AttackRequest.ID, new Packets.AttackRequest(entities).write());
     }
 
-    public static void sendStartRequest(AbstractAction action) {
+    public static void sendStartRequest(Action action) {
         ClientPlayNetworking.send(Packets.ActionStartRequest.ID, new Packets.ActionStartRequest(action).write());
     }
 

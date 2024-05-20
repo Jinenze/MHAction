@@ -9,13 +9,14 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
-public class OverHeadSlash extends Action implements AttackAction {
+public class StepSlash extends Action implements AttackAction {
     @Environment(EnvType.CLIENT)
     @Override
     public void onClientTick(int tick) {
         switch (tick) {
             case 10:
                 ClientActionRunner.attack();
+                break;
             case 15:
                 ClientActionRunner.setCanPlayerAction(true);
                 break;
@@ -37,7 +38,7 @@ public class OverHeadSlash extends Action implements AttackAction {
         playerGauge.setSpiritGauge(playerGauge.getSpiritGauge() + 10);
     }
 
-    public OverHeadSlash(String ID, int length) {
+    public StepSlash(String ID, int length) {
         super(ID, length);
     }
 }

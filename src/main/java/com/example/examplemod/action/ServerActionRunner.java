@@ -15,7 +15,7 @@ import static net.minecraft.entity.SpawnReason.COMMAND;
 public class ServerActionRunner {
     private static final ArrayList<TempleEntity> entities = new ArrayList<>();
 
-    public static void startAction(ServerPlayerEntity player, AbstractAction action) {
+    public static void startAction(ServerPlayerEntity player, Action action) {
         if (action != null) {
             player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(), action.getStartSound(), SoundCategory.PLAYERS);
         }
