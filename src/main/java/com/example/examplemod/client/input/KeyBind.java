@@ -51,7 +51,7 @@ public class KeyBind {
     }
 
     public static void tickSwitch() {
-        if (ModKeyBinds.SWITCH_KEY.isPressed()) {
+        if (ModKeyBinds.SWITCH_KEY.wasPressed()) {
             enabled = !enabled;
         }
     }

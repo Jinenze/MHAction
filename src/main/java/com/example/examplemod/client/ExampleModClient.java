@@ -20,6 +20,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.minecraft.client.MinecraftClient;
 
 @Environment(EnvType.CLIENT)
 public class ExampleModClient implements ClientModInitializer {
@@ -29,17 +30,19 @@ public class ExampleModClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        ClientTickEvents.START_CLIENT_TICK.register((client) -> {
+            if (MinecraftClient.getInstance().getOverlay() == null && MinecraftClient.getInstance().currentScreen == null) {
+                KeyBind.tickSwitch();
+                ClientActionRunner.actionTick();
+                if (KeyBind.isEnabled() && ClientActionRunner.isMainHandSword()) {
+                    KeyBind.keyBindTick();
+                }
+            }
+        });
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
             ClientActionRunner.tickPlayerYaw();
         });
-        ClientTickEvents.START_WORLD_TICK.register((client) -> {
-            KeyBind.tickSwitch();
-            ClientActionRunner.actionTick();
-            if (KeyBind.isEnabled() && ClientActionRunner.isMainHandSword()) {
-                KeyBind.keyBindTick();
-            }
-        });
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client)->{
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             ClientActionRunner.reset();
         });
         AutoConfig.register(ClientConfigWrapper.class, PartitioningSerializer.wrap(GsonConfigSerializer::new));
