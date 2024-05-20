@@ -1,9 +1,0 @@
-{
-  "category.examplemod.examplemod": "example",
-  "key.examplemod.switch": "switch",
-  "key.examplemod.dodge": "dodge",
-
-  "item.examplemod.katana": "sword",
-
-  "text.autoconfig.examplemod.option.client.a" : "A"
-}

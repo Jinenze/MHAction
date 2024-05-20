@@ -1,0 +1,9 @@
+{
+  "category.mh_action.category": "example",
+  "key.mh_action.switch": "switch",
+  "key.mh_action.dodge": "dodge",
+
+  "item.mh_action.katana": "sword",
+
+  "text.autoconfig.mh_action.option.client.a" : "A"
+}

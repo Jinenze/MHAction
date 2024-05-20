@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "examplemod",
-	"version": "${version}",
-	"name": "Template Mod",
-	"description": "123456",
+	"id": "mh_action",
+	"version": "0.1.0",
+	"name": "MHAction",
+	"description": "Action mod",
 	"authors": [
 		"Jinenze"
 	],
@@ -11,20 +11,20 @@
 		"sources": "https://github.com/Jinenze/MHAction"
 	},
 	"license": "MIT",
-	"icon": "assets/examplemod/icon.png",
+	"icon": "assets/mh_action/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.example.examplemod.ExampleMod"
+          "com.jez.mha.MHAction"
 		],
 		"client": [
-			"com.example.examplemod.client.ExampleModClient"
+			"com.jez.mha.client.ModClient"
 		],
 		"fabric-datagen": [
-			"com.example.examplemod.ExampleModDataGenerator"
+			"com.jez.mha.ModDataGenerator"
 		],
 		"modmenu": [
-			"com.example.examplemod.config.ModMenuEntry"
+			"com.jez.mha.config.ModMenuEntry"
 		]
 	},
 	"mixins": [
