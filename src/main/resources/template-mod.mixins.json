@@ -5,9 +5,14 @@
   "client": [
     "ClientPlayerMixin",
     "ItemRendererInvoker",
-    "KeyboardInputMixin"
+    "KeyBindingInvoker",
+    "KeyboardInputMixin",
+    "MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "PlayerInventoryMixin"
+  ]
 }
