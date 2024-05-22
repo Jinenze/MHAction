@@ -4,12 +4,15 @@ import com.jez.mha.MHAction;
 import com.jez.mha.action.Action;
 import com.jez.mha.client.ModClient;
 import com.jez.mha.init.ModActions;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 
 import java.util.List;
 
+@Environment(EnvType.CLIENT)
 public class ClientNetwork {
     public static void register() {
         ClientPlayNetworking.registerGlobalReceiver(Packets.ServerConfigPacket.ID, (client, handler, buf, responseSender) -> {
@@ -31,6 +34,10 @@ public class ClientNetwork {
 
     public static void sendSpawnRequest(ClientPlayerEntity player) {
         ClientPlayNetworking.send(Packets.ActionSpawnRequest.ID, new Packets.ActionSpawnRequest(player.getBlockPos()).write());
+    }
+
+    public static void sendC2SEquipRequest() {
+        ClientPlayNetworking.send(Packets.C2SEquipRequest.ID, new Packets.C2SEquipRequest().write());
     }
 
     public static void sendDiscardRequest() {

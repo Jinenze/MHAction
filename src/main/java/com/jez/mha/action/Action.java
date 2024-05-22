@@ -15,8 +15,11 @@ import net.minecraft.util.Identifier;
 public abstract class Action {
     public final Identifier ID;
     private final int length;
+    @Environment(EnvType.CLIENT)
     private KeyBinding[] actionKey;
+    @Environment(EnvType.CLIENT)
     private Identifier actionAnim;
+    @Environment(EnvType.CLIENT)
     private Action[] availableAction;
 
     public Action(String ID, int length) {
@@ -77,10 +80,12 @@ public abstract class Action {
         return length;
     }
 
+    @Environment(EnvType.CLIENT)
     public SoundEvent getStartSound() {
         return null;
     }
 
+    @Environment(EnvType.CLIENT)
     public SoundEvent getEndSound() {
         return null;
     }

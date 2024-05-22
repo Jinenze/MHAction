@@ -24,7 +24,7 @@ public class ModItems {
 
     public static void register() {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(content -> {
-            content.add(katana);
+            content.add(longSword);
         });
         BuiltinItemRendererRegistry.INSTANCE.register(longSword, new LongSwordRender());
     }

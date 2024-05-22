@@ -5,19 +5,21 @@ import com.jez.mha.init.ModActions;
 import com.jez.mha.init.ModItems;
 import com.jez.mha.init.ModKeyBinds;
 import com.jez.mha.init.ModSound;
-import net.minecraft.client.MinecraftClient;
+import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.math.Vec2f;
 
 public class LongSword extends ModSwordItem {
     @Override
-    public void drawSword() {
-        if (ModKeyBinds.ATTACK.wasPressed()) {
-            if (MinecraftClient.getInstance().player.isSprinting()) {
-                ModClient.processor.runAction(ModActions.STEP_SLASH);
-            } else {
+    public void drawSwordTick(ClientPlayerEntity player) {
+        if (ModKeyBinds.ATTACK.isPressed() && player.isOnGround()) {
+            if (player.input.getMovementInput().equals(Vec2f.ZERO)) {
                 ModClient.processor.runAction(ModActions.DRAW_SWORD);
+            } else {
+                ModClient.processor.runAction(ModActions.STEP_SLASH);
             }
         }
     }
@@ -35,6 +37,16 @@ public class LongSword extends ModSwordItem {
     @Override
     public SoundEvent getAttackSound() {
         return ModSound.DODGE.START.soundEvent;
+    }
+
+    @Override
+    public KeyframeAnimation getSubAnim() {
+        return super.getSubAnim();
+    }
+
+    @Override
+    public Item getSwordInSheathItem(){
+        return ModItems.longSword;
     }
 
     @Override

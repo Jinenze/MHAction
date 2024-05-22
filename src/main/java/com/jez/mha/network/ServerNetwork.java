@@ -23,6 +23,9 @@ public class ServerNetwork {
         ServerPlayNetworking.registerGlobalReceiver(Packets.ActionDiscardRequest.ID, (server, player, handler, buf, responseSender) -> {
             ServerActionRunner.discardActionEntity(player);
         });
+        ServerPlayNetworking.registerGlobalReceiver(Packets.C2SEquipRequest.ID, (server, player, handler, buf, responseSender) -> {
+            ServerActionRunner.equipItem(player);
+        });
     }
 
     public static void sendActionCallback(ServerPlayerEntity player) {

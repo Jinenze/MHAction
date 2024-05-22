@@ -2,6 +2,8 @@ package com.jez.mha.client.render;
 
 import com.jez.mha.client.render.impl.ModBakedModel;
 import com.jez.mha.init.ModItems;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelModifier;
 import net.minecraft.client.render.model.BakedModel;
@@ -11,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
+@Environment(EnvType.CLIENT)
 public class ModelSwapper implements ModelModifier.AfterBake {
     private ArrayList<ModelIdentifier> identifiers;
 

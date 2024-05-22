@@ -42,4 +42,10 @@ public class ServerActionRunner {
             }
         }
     }
+
+    public static void equipItem(ServerPlayerEntity player) {
+        if(player.getMainHandStack().getItem() instanceof ModSword item){
+            item.equip(player);
+        }
+    }
 }

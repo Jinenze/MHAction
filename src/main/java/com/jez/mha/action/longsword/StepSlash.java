@@ -32,6 +32,7 @@ public class StepSlash extends Action implements AttackAction {
         return new Box(pos1, pos2);
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void hit(ClientPlayerEntity player) {
         PlayerGauge playerGauge = (PlayerGauge) player;

@@ -5,8 +5,8 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.math.Box;
 
+@Environment(EnvType.CLIENT)
 public interface AttackAction {
-    @Environment(EnvType.CLIENT)
     Box getHitBox(ClientPlayerEntity player);
 
     void hit(ClientPlayerEntity player);

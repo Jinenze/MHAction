@@ -3,6 +3,7 @@ package com.jez.mha.client.input;
 import com.jez.mha.client.ModClient;
 import com.jez.mha.init.ModKeyBinds;
 import com.jez.mha.item.ModSword;
+import com.jez.mha.network.ClientNetwork;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -48,11 +49,21 @@ public class KeyBind {
                 lastKey = null;
                 key = null;
             }
-        } else {
+        } else if (ModClient.processor.isSubActionRunning()) {
             ClientPlayerEntity player = MinecraftClient.getInstance().player;
             if (player != null) {
-                if(MinecraftClient.getInstance().player.getMainHandStack().getItem() instanceof ModSword item){
-                    item.drawSword();
+                if (MinecraftClient.getInstance().player.getMainHandStack().getItem() instanceof ModSword item) {
+                    item.drawSwordTick(player);
+                }
+            }
+        } else {
+            if(ModKeyBinds.EQUIP.wasPressed()){
+                ClientPlayerEntity player = MinecraftClient.getInstance().player;
+                if(player != null){
+                    if (player.getMainHandStack().getItem() instanceof ModSword item) {
+                        item.equip(player);
+                        ClientNetwork.sendC2SEquipRequest();
+                    }
                 }
             }
         }

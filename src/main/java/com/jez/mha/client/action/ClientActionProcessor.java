@@ -82,9 +82,9 @@ public class ClientActionProcessor {
     }
 
     public void runAction(Action action) {
+        player = MinecraftClient.getInstance().player;
         length = action.getLength();
         playMainAnim(action.getActionAnim(), length);
-        player = MinecraftClient.getInstance().player;
         actionYaw = new ActionYaw(player.getHeadYaw(), player.getBodyYaw());
         runningAction = action;
         actionAge = 0;
@@ -174,7 +174,7 @@ public class ClientActionProcessor {
     public void playSubAnim(KeyframeAnimation animation) {
         var animationPlayer = new KeyframeAnimationPlayer(animation).setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL).setFirstPersonConfiguration(new FirstPersonConfiguration());
         var subAnim = ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(ModAnimations.subAnim));
-        subAnim.replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(32767, (modelName, type, value) -> value), animationPlayer, !subActionRunning);
+        subAnim.setAnimation(animationPlayer);
         subActionRunning = true;
     }
 
@@ -182,6 +182,10 @@ public class ClientActionProcessor {
         var subAnim = ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(ModAnimations.subAnim));
         subAnim.setAnimation(null);
         subActionRunning = false;
+    }
+
+    public boolean isSubActionRunning() {
+        return subActionRunning;
     }
 
     public void reset() {

@@ -3,6 +3,7 @@
   "key.mh_action.switch": "开关",
   "key.mh_action.dodge": "翻滚",
 
+  "item.mh_action.long_sword": "刀",
   "item.mh_action.katana": "刀",
 
   "text.autoconfig.mh_action.option.client.a" : "这是A"

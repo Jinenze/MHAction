@@ -1,8 +1,10 @@
 package com.jez.mha.item;
 
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonPart;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -25,7 +27,9 @@ public interface ModSword {
         }
     }
 
-    void drawSword();
+    void equip(PlayerEntity player);
+
+    void drawSwordTick(ClientPlayerEntity player);
 
     int getAttackDamage();
 

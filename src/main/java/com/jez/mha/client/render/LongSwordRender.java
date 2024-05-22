@@ -3,6 +3,8 @@ package com.jez.mha.client.render;
 import com.jez.mha.client.ModClient;
 import com.jez.mha.client.render.impl.ModBakedModel;
 import com.jez.mha.mixin.ItemRendererInvoker;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayers;
@@ -17,6 +19,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.random.Random;
 
+@Environment(EnvType.CLIENT)
 public class LongSwordRender implements BuiltinItemRendererRegistry.DynamicItemRenderer {
     private final Random random = Random.create();
 
