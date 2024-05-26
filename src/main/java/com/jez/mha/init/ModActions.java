@@ -28,11 +28,6 @@ public class ModActions {
     public static final ArrayList<Action> ACTIONS = new ArrayList<>();
 
     @Environment(EnvType.CLIENT)
-    public static void client() {
-        ModKeyBinds.init();
-    }
-
-    @Environment(EnvType.CLIENT)
     public static void clientInit(){
         register(null, DODGE, ModKeyBinds.DODGE_KEY, ModAnimations.DODGE);
         DEFAULT.add(DODGE);
@@ -44,7 +39,6 @@ public class ModActions {
     }
 
     public static void register() {
-
     }
 
     @Nullable
@@ -58,7 +52,7 @@ public class ModActions {
     public static void register(@Nullable List<Action> actionList, Action action, @Nullable KeyBinding key, @Nullable Identifier actionAnim, Action... availableAction) {
         KeyBinding[] k = {null, key};
         if (key == null) {
-            k = new KeyBinding[]{ModKeyBinds.ATTACK,ModKeyBinds.ATTACK};
+            k = new KeyBinding[]{ModKeyBinds.EQUIP,ModKeyBinds.EQUIP};
         }
         action.setActionKey(k);
         action.setActionAnim(Objects.requireNonNullElseGet(actionAnim, () -> action.ID));

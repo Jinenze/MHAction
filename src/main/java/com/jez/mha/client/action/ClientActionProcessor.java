@@ -43,10 +43,11 @@ public class ClientActionProcessor implements ClientProcessor {
     private List<Action> actions;
     private List<Action> defaultActions;
     private final ClientPlayerEntity player;
-    private final KeyBind keyBind = new KeyBind(this);
+    private final KeyBind keyBind;
 
     public ClientActionProcessor(ClientPlayerEntity player) {
         this.player = player;
+        keyBind = new KeyBind(this);
     }
 
     public void actionTick() {

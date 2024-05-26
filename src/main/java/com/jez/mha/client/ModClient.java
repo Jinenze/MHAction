@@ -1,5 +1,6 @@
 package com.jez.mha.client;
 
+import com.jez.mha.MHAction;
 import com.jez.mha.client.action.ClientActionProcessor;
 import com.jez.mha.client.action.impl.ClientProcessor;
 import com.jez.mha.client.action.impl.DummyClientProcessor;
@@ -38,8 +39,10 @@ public class ModClient implements ClientModInitializer {
         });
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             ModUi.init();
+            if (client.player == null) {
+                MHAction.LOGGER.info("wcnm");
+            }
             processor = new ClientActionProcessor(client.player);
-            ModActions.client();
         });
         AutoConfig.register(ClientConfigWrapper.class, PartitioningSerializer.wrap(GsonConfigSerializer::new));
         config = AutoConfig.getConfigHolder(ClientConfigWrapper.class).getConfig().client;
@@ -51,6 +54,5 @@ public class ModClient implements ClientModInitializer {
         PlayerAnimationAccess.REGISTER_ANIMATION_EVENT.register(ModAnimations::register);
         ClientNetwork.register();
         ModKeyBinds.register();
-        ModActions.clientInit();
     }
 }
