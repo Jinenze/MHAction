@@ -3,7 +3,6 @@ package com.jez.mha.network;
 import com.jez.mha.MHAction;
 import com.jez.mha.action.Action;
 import com.jez.mha.client.ModClient;
-import com.jez.mha.init.ModActions;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -17,7 +16,6 @@ public class ClientNetwork {
     public static void register() {
         ClientPlayNetworking.registerGlobalReceiver(Packets.ServerConfigPacket.ID, (client, handler, buf, responseSender) -> {
             MHAction.config = Packets.ServerConfigPacket.read(buf);
-            ModActions.client();
         });
         ClientPlayNetworking.registerGlobalReceiver(Packets.ActionCallback.ID, (client, handler, buf, responseSender) -> {
             ModClient.processor.actionAttackCallBack();

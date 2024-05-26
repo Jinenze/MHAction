@@ -4,8 +4,10 @@ import com.jez.mha.MHAction;
 import com.jez.mha.action.Action;
 import com.jez.mha.action.AttackAction;
 import com.jez.mha.action.CounterAction;
+import com.jez.mha.action.WeaponActions;
+import com.jez.mha.client.action.impl.ClientProcessor;
 import com.jez.mha.init.ModAnimations;
-import com.jez.mha.item.ModSword;
+import com.jez.mha.item.MhaSword;
 import com.jez.mha.network.ClientNetwork;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonConfiguration;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonMode;
@@ -20,29 +22,30 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
-public class ClientActionProcessor {
+public class ClientActionProcessor implements ClientProcessor {
     private int length;
     private int actionAge;
     private ActionYaw actionYaw;
     private boolean canPlayerAction = true;
-    private boolean subActionRunning;
     @Nullable
     private Action runningAction;
-    private ClientPlayerEntity player;
+    private final ClientPlayerEntity player;
     @Nullable
     private Consumer<ClientPlayerEntity> tickRunnable;
-    private final ArrayList<Action> Actions = new ArrayList<>();
-    private final ArrayList<Action> defaultActions = new ArrayList<>();
+    private boolean equipped;
+    private boolean ready;
+    private List<Action> actions;
+    private List<Action> defaultActions;
+
+    public ClientActionProcessor(ClientPlayerEntity player) {
+        this.player = player;
+    }
 
     public void actionTick() {
         if (runningAction != null) {
@@ -58,10 +61,19 @@ public class ClientActionProcessor {
     }
 
     public void searchAction(KeyBinding lastKey, KeyBinding key) {
-        for (Action a : Actions) {
-            KeyBinding[] keys = a.getActionKey();
-            if ((keys[0] == lastKey && keys[1] == key) || (keys[1] == lastKey && keys[0] == key)) {
-                isAvailableAction(a);
+        if (runningAction == null) {
+            for (Action action : defaultActions) {
+                KeyBinding[] keys = action.getActionKey();
+                if ((keys[0] == lastKey && keys[1] == key) || (keys[1] == lastKey && keys[0] == key)) {
+                    isAvailableAction(action);
+                }
+            }
+        } else {
+            for (Action action : actions) {
+                KeyBinding[] keys = action.getActionKey();
+                if ((keys[0] == lastKey && keys[1] == key) || (keys[1] == lastKey && keys[0] == key)) {
+                    isAvailableAction(action);
+                }
             }
         }
     }
@@ -75,14 +87,13 @@ public class ClientActionProcessor {
                 if (runningAction.isAvailable(action)) {
                     runAction(action);
                 }
-            } else if (isInDefaultAction(action)) {
+            } else {
                 runAction(action);
             }
         }
     }
 
     public void runAction(Action action) {
-        player = MinecraftClient.getInstance().player;
         length = action.getLength();
         playMainAnim(action.getActionAnim(), length);
         actionYaw = new ActionYaw(player.getHeadYaw(), player.getBodyYaw());
@@ -93,30 +104,6 @@ public class ClientActionProcessor {
         action.clientInit(player);
         ClientNetwork.sendStartRequest(action);
         MHAction.LOGGER.info(runningAction.ID.toString());
-    }
-
-    public void register(Action action, KeyBinding key, Identifier actionAnim, Action... availableAction) {
-        KeyBinding[] k = {null, key};
-        action.setActionKey(k);
-        action.setActionAnim(actionAnim);
-        action.setAvailableAction(availableAction);
-        Actions.add(action);
-    }
-
-    public void register(Action action, KeyBinding lastKey, KeyBinding key, Identifier actionAnim, Action... availableAction) {
-        KeyBinding[] k = {lastKey, key};
-        action.setActionKey(k);
-        action.setActionAnim(actionAnim);
-        action.setAvailableAction(availableAction);
-        Actions.add(action);
-    }
-
-    public boolean isMainHandSword() {
-        if (MinecraftClient.getInstance().player != null) {
-//            return MinecraftClient.getInstance().player.getMainHandStack().isIn(ItemTags.SWORDS);
-            return MinecraftClient.getInstance().player.getMainHandStack().getItem() instanceof ModSword;
-        }
-        return false;
     }
 
     public void attack() {
@@ -135,8 +122,8 @@ public class ClientActionProcessor {
         mainAnim.replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(length, (modelName, type, value) -> value), animationPlayer, runningAction != null);
     }
 
-    public boolean isRunning() {
-        return runningAction != null || subActionRunning;
+    public boolean isMainActionRunning() {
+        return runningAction != null;
     }
 
     public void actionAttackCallBack() {
@@ -154,19 +141,6 @@ public class ClientActionProcessor {
         tickRunnable.accept(player);
     }
 
-    public void addDefaultAction(Action action) {
-        defaultActions.add(action);
-    }
-
-    private boolean isInDefaultAction(Action action) {
-        for (Action a : defaultActions) {
-            if (a == action) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void setCanPlayerAction(boolean canPlayerAction) {
         this.canPlayerAction = canPlayerAction;
     }
@@ -175,23 +149,40 @@ public class ClientActionProcessor {
         var animationPlayer = new KeyframeAnimationPlayer(animation).setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL).setFirstPersonConfiguration(new FirstPersonConfiguration());
         var subAnim = ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(ModAnimations.subAnim));
         subAnim.setAnimation(animationPlayer);
-        subActionRunning = true;
     }
 
     public void stopSubAnim() {
         var subAnim = ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(ModAnimations.subAnim));
         subAnim.setAnimation(null);
-        subActionRunning = false;
     }
 
-    public boolean isSubActionRunning() {
-        return subActionRunning;
+    public void setProcessorActions(WeaponActions weaponActions) {
+        defaultActions = weaponActions.getDefaultActions();
+        actions = weaponActions.getActions();
     }
 
-    public void reset() {
-        canPlayerAction = true;
-        runningAction = null;
-        tickRunnable = null;
+    public ClientPlayerEntity getPlayer() {
+        return player;
+    }
+
+    public boolean isEquipped() {
+        return equipped;
+    }
+
+    public void setEquipped(boolean equipped) {
+        this.equipped = equipped;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    public ActionYaw getActionYaw() {
+        return actionYaw;
     }
 
     public void tickPlayerYaw() {
@@ -201,42 +192,17 @@ public class ClientActionProcessor {
         }
     }
 
-    public ActionYaw getActionYaw() {
-        return actionYaw;
+    public void reset() {
+        canPlayerAction = true;
+        runningAction = null;
+        tickRunnable = null;
     }
 
-    public static class ActionYaw {
-        private float head;
-        private float body;
-
-        public ActionYaw(float head, float body) {
-            this.head = head;
-            this.body = body;
+    public boolean isMainHandSword() {
+        if (MinecraftClient.getInstance().player != null) {
+//            return MinecraftClient.getInstance().player.getMainHandStack().isIn(ItemTags.SWORDS);
+            return MinecraftClient.getInstance().player.getMainHandStack().getItem() instanceof MhaSword;
         }
-
-        public void playerInput(ClientPlayerEntity player) {
-            Vec2f input = player.input.getMovementInput();
-            switch ((int) input.x) {
-                case 1:
-                    head -= input.y == 1.0f ? 45f : 90f;
-                    break;
-                case -1:
-                    head += input.y == 1.0f ? 45f : 90f;
-                    break;
-            }
-            body = head;
-        }
-
-        public Vec3d getVec3d() {
-            return new Vec3d(-Math.sin(Math.toRadians(head)), 0, Math.cos(Math.toRadians(head)));
-        }
-
-        public float getHead() {
-            return head;
-        }
-
-        public float getBody() {
-            return body;
-        }
+        return false;
     }
 }

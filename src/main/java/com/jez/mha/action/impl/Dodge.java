@@ -39,12 +39,12 @@ public class Dodge extends Action implements CounterAction {
         MHAction.LOGGER.info("OHHHHHHHHHHHHHHH");
     }
 
-    public Dodge(String ID, int length) {
-        super(ID, length);
-    }
-
     @Override
     public SoundEvent getStartSound() {
         return ModSound.DODGE.START.soundEvent;
+    }
+
+    public Dodge(String ID, int length) {
+        super(ID, length);
     }
 }

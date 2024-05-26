@@ -1,10 +1,10 @@
 package com.jez.mha.network;
 
+import com.google.gson.Gson;
 import com.jez.mha.MHAction;
 import com.jez.mha.action.Action;
 import com.jez.mha.config.ServerConfig;
 import com.jez.mha.init.ModActions;
-import com.google.gson.Gson;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketByteBuf;

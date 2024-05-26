@@ -13,8 +13,8 @@ import org.lwjgl.glfw.GLFW;
 public class ModKeyBinds {
     public static KeyBinding ATTACK;
     public static KeyBinding SUB_ATTACK;
+    public static KeyBinding UNLOAD = KeyBind.register(KeyBindingHelper.registerKeyBinding(new KeyBinding("key.mh_action.switch", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_G, "category.mh_action.category")));
     public static final KeyBinding EQUIP = KeyBind.register(KeyBindingHelper.registerKeyBinding(new KeyBinding("key.mh_action.equip", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_K, "category.mh_action.category")));
-    public static final KeyBinding SWITCH_KEY = KeyBind.register(KeyBindingHelper.registerKeyBinding(new KeyBinding("key.mh_action.switch", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_G, "category.mh_action.category")));
     public static final KeyBinding SLASH_KEY = KeyBind.register(KeyBindingHelper.registerKeyBinding(new KeyBinding("key.mh_action.slash", InputUtil.Type.MOUSE, GLFW.GLFW_MOUSE_BUTTON_5, "category.mh_action.category")));
     public static final KeyBinding DODGE_KEY = KeyBind.register(KeyBindingHelper.registerKeyBinding(new KeyBinding("key.mh_action.dodge", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_SPACE, "category.mh_action.category")));
 

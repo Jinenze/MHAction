@@ -22,7 +22,7 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "handleInputEvents", at = @At("HEAD"))
     private void handleInputEventsInject(CallbackInfo ci) {
-        if (ModClient.processor.isRunning()) {
+        if (ModClient.processor.isEquipped()) {
             ((KeyBindingInvoker) this.options.dropKey).mha$reset();
             ((KeyBindingInvoker) this.options.inventoryKey).mha$reset();
             ((KeyBindingInvoker) this.options.swapHandsKey).mha$reset();
@@ -34,16 +34,16 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "doAttack", at = @At("HEAD"), cancellable = true)
     private void doAttackInject(CallbackInfoReturnable<Boolean> cir) {
-        if (ModClient.processor.isRunning()) cir.setReturnValue(false);
+        if (ModClient.processor.isEquipped()) cir.setReturnValue(false);
     }
 
     @Inject(method = "handleBlockBreaking", at = @At("HEAD"), cancellable = true)
     private void pre_handleBlockBreaking(boolean bl, CallbackInfo ci) {
-        if (ModClient.processor.isRunning()) ci.cancel();
+        if (ModClient.processor.isEquipped()) ci.cancel();
     }
 
     @Inject(method = "doItemUse", at = @At("HEAD"), cancellable = true)
     private void pre_doItemUse(CallbackInfo ci) {
-        if (ModClient.processor.isRunning()) ci.cancel();
+        if (ModClient.processor.isEquipped()) ci.cancel();
     }
 }

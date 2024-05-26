@@ -2,11 +2,10 @@ package com.jez.mha.client.input;
 
 import com.jez.mha.client.ModClient;
 import com.jez.mha.init.ModKeyBinds;
-import com.jez.mha.item.ModSword;
+import com.jez.mha.item.MhaSword;
 import com.jez.mha.network.ClientNetwork;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +20,6 @@ public class KeyBind {
     @Nullable
     private static KeyBinding key;
     private static int tickCount;
-    private static boolean enabled = true;
 
     public static KeyBinding register(KeyBinding key) {
         keyList.add(key);
@@ -29,57 +27,57 @@ public class KeyBind {
     }
 
     public static void keyBindTick() {
-        if (ModClient.processor.isRunning()) {
-            for (KeyBinding k : keyList) {
-                if (k.isPressed()) {
-                    if (k != lastKey && tickCount <= 0) {
-                        tickCount = 4;
-                    }
-                    if (lastKey == null) {
-                        lastKey = k;
-                    } else if (k != lastKey) {
-                        key = k;
+        if (ModClient.processor.isEquipped()) {
+            if (ModClient.processor.isReady()) {
+                for (KeyBinding k : keyList) {
+                    if (k.isPressed()) {
+                        if (k != lastKey && tickCount <= 0) {
+                            tickCount = 4;
+                        }
+                        if (lastKey == null) {
+                            lastKey = k;
+                        } else if (k != lastKey) {
+                            key = k;
+                        }
                     }
                 }
-            }
-            if (tickCount > 0) {
-                --tickCount;
-            } else {
-                ModClient.processor.searchAction(lastKey, key);
-                lastKey = null;
-                key = null;
-            }
-        } else if (ModClient.processor.isSubActionRunning()) {
-            ClientPlayerEntity player = MinecraftClient.getInstance().player;
-            if (player != null) {
-                if (MinecraftClient.getInstance().player.getMainHandStack().getItem() instanceof ModSword item) {
+                if (tickCount > 0) {
+                    --tickCount;
+                } else {
+                    ModClient.processor.searchAction(lastKey, key);
+                    lastKey = null;
+                    key = null;
+                    return;
+                }
+                ClientPlayerEntity player = ModClient.processor.getPlayer();
+                if (player.getMainHandStack().getItem() instanceof MhaSword item) {
                     item.drawSwordTick(player);
                 }
+            } else {
+                ClientPlayerEntity player = ModClient.processor.getPlayer();
+                if (player.getMainHandStack().getItem() instanceof MhaSword item) {
+                    item.drawSwordTick(player);
+                }
+                equipTick(player);
             }
         } else {
-            if(ModKeyBinds.EQUIP.wasPressed()){
-                ClientPlayerEntity player = MinecraftClient.getInstance().player;
-                if(player != null){
-                    if (player.getMainHandStack().getItem() instanceof ModSword item) {
-                        item.equip(player);
-                        ClientNetwork.sendC2SEquipRequest();
-                    }
-                }
+            ClientPlayerEntity player = ModClient.processor.getPlayer();
+            if (player != null) {
+                equipTick(player);
+            }
+        }
+    }
+
+    private static void equipTick(ClientPlayerEntity player) {
+        if (ModKeyBinds.EQUIP.wasPressed()) {
+            if (player.getMainHandStack().getItem() instanceof MhaSword item) {
+                item.equip(player);
+                ClientNetwork.sendC2SEquipRequest();
             }
         }
     }
 
     public static void setTickCount(int c) {
         tickCount = c;
-    }
-
-    public static void tickSwitch() {
-        if (ModKeyBinds.SWITCH_KEY.wasPressed()) {
-            enabled = !enabled;
-        }
-    }
-
-    public static boolean isEnabled() {
-        return enabled;
     }
 }

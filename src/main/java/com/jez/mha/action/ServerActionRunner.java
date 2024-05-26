@@ -2,27 +2,25 @@ package com.jez.mha.action;
 
 import com.jez.mha.entity.TempleEntity;
 import com.jez.mha.init.ModEntities;
-import com.jez.mha.item.ModSword;
+import com.jez.mha.item.MhaSword;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
-
-import static net.minecraft.entity.SpawnReason.COMMAND;
 
 public class ServerActionRunner {
     private static final ArrayList<TempleEntity> entities = new ArrayList<>();
 
     public static void startAction(ServerPlayerEntity player, Action action) {
         if (action != null) {
-            player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(), action.getStartSound(), SoundCategory.PLAYERS);
+            action.serverStart(player);
         }
     }
 
     public static void spawnActionEntity(ServerPlayerEntity player, BlockPos pos) {
-        entities.add(ModEntities.TEMPLE.spawn(player.getServerWorld(), pos, COMMAND).setOwner(player));
+        entities.add(ModEntities.TEMPLE.spawn(player.getServerWorld(), pos, SpawnReason.COMMAND).setOwner(player));
     }
 
     public static void discardActionEntity(ServerPlayerEntity player) {
@@ -37,14 +35,16 @@ public class ServerActionRunner {
         Entity entity;
         for (int id : entityIds) {
             entity = player.getServerWorld().getEntityById(id);
-            if (entity != null) {
-                ModSword.attack(player, entity);
+            if (player.getMainHandStack().getItem() instanceof MhaSword item) {
+                if (entity != null) {
+                    item.attack(player, entity);
+                }
             }
         }
     }
 
     public static void equipItem(ServerPlayerEntity player) {
-        if(player.getMainHandStack().getItem() instanceof ModSword item){
+        if (player.getMainHandStack().getItem() instanceof MhaSword item) {
             item.equip(player);
         }
     }

@@ -9,6 +9,8 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
@@ -26,6 +28,13 @@ public abstract class Action {
         this.ID = new Identifier(MHAction.MODID, ID);
         this.length = length;
     }
+
+    public void serverStart(ServerPlayerEntity player) {
+        if (this.getStartSound() != null) {
+            player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(), this.getStartSound(), SoundCategory.PLAYERS);
+        }
+    }
+
 
     @Environment(EnvType.CLIENT)
     public void clientInit(ClientPlayerEntity player) {
@@ -52,7 +61,7 @@ public abstract class Action {
     }
 
     @Environment(EnvType.CLIENT)
-    public void setAvailableAction(Action[] actions){
+    public void setAvailableAction(Action[] actions) {
         this.availableAction = actions;
     }
 
