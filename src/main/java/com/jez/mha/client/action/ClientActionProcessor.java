@@ -6,6 +6,7 @@ import com.jez.mha.action.AttackAction;
 import com.jez.mha.action.CounterAction;
 import com.jez.mha.action.WeaponActions;
 import com.jez.mha.client.action.impl.ClientProcessor;
+import com.jez.mha.client.input.KeyBind;
 import com.jez.mha.init.ModAnimations;
 import com.jez.mha.item.MhaSword;
 import com.jez.mha.network.ClientNetwork;
@@ -35,13 +36,14 @@ public class ClientActionProcessor implements ClientProcessor {
     private boolean canPlayerAction = true;
     @Nullable
     private Action runningAction;
-    private final ClientPlayerEntity player;
     @Nullable
     private Consumer<ClientPlayerEntity> tickRunnable;
     private boolean equipped;
     private boolean ready;
     private List<Action> actions;
     private List<Action> defaultActions;
+    private final ClientPlayerEntity player;
+    private final KeyBind keyBind = new KeyBind(this);
 
     public ClientActionProcessor(ClientPlayerEntity player) {
         this.player = player;
@@ -57,6 +59,9 @@ public class ClientActionProcessor implements ClientProcessor {
             if (actionAge == length) {
                 reset();
             }
+        }
+        if (isMainHandSword()) {
+            keyBind.keyBindTick();
         }
     }
 
@@ -165,12 +170,16 @@ public class ClientActionProcessor implements ClientProcessor {
         return player;
     }
 
-    public boolean isEquipped() {
-        return equipped;
+    public KeyBind getKeyBind() {
+        return keyBind;
     }
 
     public void setEquipped(boolean equipped) {
         this.equipped = equipped;
+    }
+
+    public boolean isEquipped() {
+        return equipped;
     }
 
     public void setReady(boolean ready) {

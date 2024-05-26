@@ -1,6 +1,6 @@
 package com.jez.mha.client.input;
 
-import com.jez.mha.client.ModClient;
+import com.jez.mha.client.action.impl.ClientProcessor;
 import com.jez.mha.init.ModKeyBinds;
 import com.jez.mha.item.MhaSword;
 import com.jez.mha.network.ClientNetwork;
@@ -16,19 +16,21 @@ import java.util.ArrayList;
 public class KeyBind {
     private static final ArrayList<KeyBinding> keyList = new ArrayList<>();
     @Nullable
-    private static KeyBinding lastKey;
+    private KeyBinding lastKey;
     @Nullable
-    private static KeyBinding key;
-    private static int tickCount;
+    private KeyBinding key;
+    private int tickCount;
+    private final ClientProcessor processor;
+    private final ClientPlayerEntity player;
 
     public static KeyBinding register(KeyBinding key) {
         keyList.add(key);
         return key;
     }
 
-    public static void keyBindTick() {
-        if (ModClient.processor.isEquipped()) {
-            if (ModClient.processor.isReady()) {
+    public void keyBindTick() {
+        if (processor.isEquipped()) {
+            if (processor.isReady()) {
                 for (KeyBinding k : keyList) {
                     if (k.isPressed()) {
                         if (k != lastKey && tickCount <= 0) {
@@ -44,24 +46,21 @@ public class KeyBind {
                 if (tickCount > 0) {
                     --tickCount;
                 } else {
-                    ModClient.processor.searchAction(lastKey, key);
+                    processor.searchAction(lastKey, key);
                     lastKey = null;
                     key = null;
                     return;
                 }
-                ClientPlayerEntity player = ModClient.processor.getPlayer();
                 if (player.getMainHandStack().getItem() instanceof MhaSword item) {
                     item.drawSwordTick(player);
                 }
             } else {
-                ClientPlayerEntity player = ModClient.processor.getPlayer();
                 if (player.getMainHandStack().getItem() instanceof MhaSword item) {
                     item.drawSwordTick(player);
                 }
                 equipTick(player);
             }
         } else {
-            ClientPlayerEntity player = ModClient.processor.getPlayer();
             if (player != null) {
                 equipTick(player);
             }
@@ -77,7 +76,12 @@ public class KeyBind {
         }
     }
 
-    public static void setTickCount(int c) {
+    public void setTickCount(int c) {
         tickCount = c;
+    }
+
+    public KeyBind(ClientProcessor processor) {
+        this.processor = processor;
+        player = processor.getPlayer();
     }
 }
