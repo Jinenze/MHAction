@@ -51,5 +51,6 @@ public class ModClient implements ClientModInitializer {
         PlayerAnimationAccess.REGISTER_ANIMATION_EVENT.register(ModAnimations::register);
         ClientNetwork.register();
         ModKeyBinds.register();
+        ModActions.clientInit();
     }
 }

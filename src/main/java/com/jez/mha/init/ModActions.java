@@ -30,6 +30,10 @@ public class ModActions {
     @Environment(EnvType.CLIENT)
     public static void client() {
         ModKeyBinds.init();
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static void clientInit(){
         register(null, DODGE, ModKeyBinds.DODGE_KEY, ModAnimations.DODGE);
         DEFAULT.add(DODGE);
         LongSword.DEFAULT.addAll(DEFAULT);
