@@ -30,7 +30,7 @@ public class ModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientTickEvents.START_CLIENT_TICK.register((client) -> {
-            if (MinecraftClient.getInstance().getOverlay() == null && MinecraftClient.getInstance().currentScreen == null) {
+            if (client.getOverlay() == null && client.currentScreen == null) {
                 processor.actionTick();
             }
         });
@@ -39,9 +39,6 @@ public class ModClient implements ClientModInitializer {
         });
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             ModUi.init();
-            if (client.player == null) {
-                MHAction.LOGGER.info("wcnm");
-            }
             processor = new ClientActionProcessor(client.player);
         });
         AutoConfig.register(ClientConfigWrapper.class, PartitioningSerializer.wrap(GsonConfigSerializer::new));
