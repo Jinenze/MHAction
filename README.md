@@ -2,9 +2,7 @@
 
 动画api使用的是[KosmX](https://github.com/KosmX)的[PlayerAnimator](https://github.com/KosmX/minecraftPlayerAnimator)
 
-参考mod [BetterCombat](https://github.com/ZsoltMolnarrr/BetterCombat) [ParCool](https://github.com/alRex-U/ParCool) [Create](https://github.com/Fabricators-of-Create/Create)
-
-以及感谢路上所有的mod制作教程作者
+感谢路上所有的mod制作教程作者
 
 ---
 以下是一些计划
