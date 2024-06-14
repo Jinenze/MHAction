@@ -13,6 +13,15 @@ import java.util.function.Consumer;
 @Environment(EnvType.CLIENT)
 public class DummyClientProcessor implements ClientProcessor {
 
+    private static final DummyClientProcessor INSTANCE = new DummyClientProcessor();
+
+    public static DummyClientProcessor getInstance(){
+        return INSTANCE;
+    }
+
+    private DummyClientProcessor(){
+    }
+
     @Override
     public void actionTick() {
 

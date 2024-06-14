@@ -6,7 +6,7 @@ import com.jez.mha.init.ModActions;
 import com.jez.mha.init.ModEntities;
 import com.jez.mha.init.ModItems;
 import com.jez.mha.init.ModSound;
-import com.jez.mha.item.MhaSword;
+import com.jez.mha.item.IMhaSword;
 import com.jez.mha.network.ServerNetwork;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
@@ -28,7 +28,7 @@ public class MHAction implements ModInitializer {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             ServerPlayerEntity player = handler.getPlayer();
             ItemStack itemStack = player.getMainHandStack();
-            if (itemStack.getItem() instanceof MhaSword item) {
+            if (itemStack.getItem() instanceof IMhaSword item) {
                 if (item.isEquipped(player)) {
                     item.equip(player);
                 }

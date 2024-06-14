@@ -61,7 +61,7 @@ public interface ClientProcessor {
 
     boolean isMainHandSword();
 
-    class ActionYaw {
+    final class ActionYaw {
         private float head;
         private float body;
 

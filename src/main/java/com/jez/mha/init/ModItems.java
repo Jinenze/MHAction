@@ -1,7 +1,7 @@
 package com.jez.mha.init;
 
 import com.jez.mha.MHAction;
-import com.jez.mha.client.render.ModItemRender;
+import com.jez.mha.client.render.LongSwordRender;
 import com.jez.mha.item.LongSword;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -19,14 +19,12 @@ public class ModItems {
     public static final ArrayList<Identifier> ITEM_ID = new ArrayList<>();
 
     public static Item longSword = register(new Identifier(MHAction.MODID, "long_sword"), new LongSword(new Item.Settings().fireproof().rarity(Rarity.RARE)));
-    public static Item katana = Registry.register(Registries.ITEM, new Identifier(MHAction.MODID, "katana"), new LongSword(new Item.Settings().fireproof().maxDamage(1000).rarity(Rarity.RARE)));
-    public static Item katanaa = Registry.register(Registries.ITEM, new Identifier(MHAction.MODID, "katanaa"), new LongSword(new Item.Settings().fireproof().rarity(Rarity.RARE)));
 
     public static void register() {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(content -> {
             content.add(longSword);
         });
-        BuiltinItemRendererRegistry.INSTANCE.register(longSword, new ModItemRender());
+        BuiltinItemRendererRegistry.INSTANCE.register(longSword, new LongSwordRender());
     }
 
     public static void forEach(Consumer<Identifier> consumer) {

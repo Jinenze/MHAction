@@ -2,7 +2,7 @@ package com.jez.mha.client.input;
 
 import com.jez.mha.client.action.impl.ClientProcessor;
 import com.jez.mha.init.ModKeyBinds;
-import com.jez.mha.item.MhaSword;
+import com.jez.mha.item.IMhaSword;
 import com.jez.mha.network.ClientNetwork;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -51,11 +51,11 @@ public class KeyBind {
                     key = null;
                     return;
                 }
-                if (player.getMainHandStack().getItem() instanceof MhaSword item) {
+                if (player.getMainHandStack().getItem() instanceof IMhaSword item) {
                     item.drawSwordTick(player);
                 }
             } else {
-                if (player.getMainHandStack().getItem() instanceof MhaSword item) {
+                if (player.getMainHandStack().getItem() instanceof IMhaSword item) {
                     item.drawSwordTick(player);
                 }
                 equipTick(player);
@@ -69,7 +69,7 @@ public class KeyBind {
 
     private static void equipTick(ClientPlayerEntity player) {
         if (ModKeyBinds.EQUIP.wasPressed()) {
-            if (player.getMainHandStack().getItem() instanceof MhaSword item) {
+            if (player.getMainHandStack().getItem() instanceof IMhaSword item) {
                 item.equip(player);
                 ClientNetwork.sendC2SEquipRequest();
             }

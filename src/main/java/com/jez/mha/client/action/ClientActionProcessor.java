@@ -8,7 +8,7 @@ import com.jez.mha.action.WeaponActions;
 import com.jez.mha.client.action.impl.ClientProcessor;
 import com.jez.mha.client.input.KeyBind;
 import com.jez.mha.init.ModAnimations;
-import com.jez.mha.item.MhaSword;
+import com.jez.mha.item.IMhaSword;
 import com.jez.mha.network.ClientNetwork;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonConfiguration;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonMode;
@@ -211,7 +211,7 @@ public class ClientActionProcessor implements ClientProcessor {
     public boolean isMainHandSword() {
         if (MinecraftClient.getInstance().player != null) {
 //            return MinecraftClient.getInstance().player.getMainHandStack().isIn(ItemTags.SWORDS);
-            return MinecraftClient.getInstance().player.getMainHandStack().getItem() instanceof MhaSword;
+            return MinecraftClient.getInstance().player.getMainHandStack().getItem() instanceof IMhaSword;
         }
         return false;
     }

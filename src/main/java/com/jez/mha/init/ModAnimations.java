@@ -16,6 +16,7 @@ public class ModAnimations {
     public static final Identifier mainAnim = new Identifier(MHAction.MODID, "main_anim");
     public static final Identifier subAnim = new Identifier(MHAction.MODID, "sub_anim");
     public static final Identifier DODGE = new Identifier(MHAction.MODID, "nmlgb");
+    public static final Identifier katana_sub = new Identifier(MHAction.MODID, "katana_sub");
 
     public static void register(AbstractClientPlayerEntity player, AnimationStack animationStack) {
         playerAssociatedAnimationData = PlayerAnimationAccess.getPlayerAssociatedData(player);

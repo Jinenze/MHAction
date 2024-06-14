@@ -2,7 +2,7 @@ package com.jez.mha.action;
 
 import com.jez.mha.entity.TempleEntity;
 import com.jez.mha.init.ModEntities;
-import com.jez.mha.item.MhaSword;
+import com.jez.mha.item.IMhaSword;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -35,7 +35,7 @@ public class ServerActionRunner {
         Entity entity;
         for (int id : entityIds) {
             entity = player.getServerWorld().getEntityById(id);
-            if (player.getMainHandStack().getItem() instanceof MhaSword item) {
+            if (player.getMainHandStack().getItem() instanceof IMhaSword item) {
                 if (entity != null) {
                     item.attack(player, entity);
                 }
@@ -44,7 +44,7 @@ public class ServerActionRunner {
     }
 
     public static void equipItem(ServerPlayerEntity player) {
-        if (player.getMainHandStack().getItem() instanceof MhaSword item) {
+        if (player.getMainHandStack().getItem() instanceof IMhaSword item) {
             item.equip(player);
         }
     }

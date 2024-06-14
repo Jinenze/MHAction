@@ -24,7 +24,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 @Environment(EnvType.CLIENT)
 public class ModClient implements ClientModInitializer {
     public static final ModelSwapper MODEL_SWAPPER = new ModelSwapper();
-    public static ClientProcessor processor = new DummyClientProcessor();
+    public static ClientProcessor processor = DummyClientProcessor.getInstance();
 
     public static ClientConfig config;
 

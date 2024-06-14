@@ -8,11 +8,10 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 
-public interface MhaSword {
+public interface IMhaSword {
     void attack(ServerPlayerEntity player, Entity target);
 
     void equip(PlayerEntity player);
@@ -31,15 +30,6 @@ public interface MhaSword {
 
     @Environment(EnvType.CLIENT)
     KeyframeAnimation getSubAnim();
-
-    @Environment(EnvType.CLIENT)
-    Item getSwordInSheathItem();
-
-    @Environment(EnvType.CLIENT)
-    Item getSwordItem();
-
-    @Environment(EnvType.CLIENT)
-    Item getSheathItem();
 
     @Environment(EnvType.CLIENT)
     WeaponActions getWeaponActions();

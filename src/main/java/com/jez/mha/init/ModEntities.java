@@ -1,8 +1,8 @@
 package com.jez.mha.init;
 
 import com.jez.mha.MHAction;
+import com.jez.mha.client.render.entity.TempleEntityRenderer;
 import com.jez.mha.entity.TempleEntity;
-import com.jez.mha.entity.renderer.TempleEntityRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;

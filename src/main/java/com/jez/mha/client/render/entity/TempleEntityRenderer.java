@@ -1,4 +1,4 @@
-package com.jez.mha.entity.renderer;
+package com.jez.mha.client.render.entity;
 
 import com.jez.mha.entity.TempleEntity;
 import net.minecraft.client.render.entity.EntityRenderer;
