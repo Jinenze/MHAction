@@ -4,7 +4,7 @@ import com.jez.mha.MHAction;
 import com.jez.mha.action.Action;
 import com.jez.mha.action.CounterAction;
 import com.jez.mha.client.ModClient;
-import com.jez.mha.init.ModSound;
+import com.jez.mha.init.ModSounds;
 import com.jez.mha.network.ClientNetwork;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -41,7 +41,7 @@ public class Dodge extends Action implements CounterAction {
 
     @Override
     public SoundEvent getStartSound() {
-        return ModSound.DODGE.START.soundEvent;
+        return ModSounds.DODGE.START.soundEvent;
     }
 
     public Dodge(String ID, int length) {

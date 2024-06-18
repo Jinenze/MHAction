@@ -15,27 +15,25 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ModActions {
-    public static Action DODGE = new Dodge("dodge", 20);
-    public static Action UNLOAD = new Unload("unload", 20);
-    public static Action DRAW_SWORD = new DrawSword("draw_sword", 20);
-    public static Action STEP_SLASH = new StepSlash("step_slash", 20);
-    public static Action OVER_HEAD_SLASH = new OverHeadSlash("over_head_slash", 20);
+    public static final Action DODGE = new Dodge("dodge", 20);
+    public static final Action UNLOAD = new Unload("unload", 20);
+    public static final Action DRAW_SWORD = new DrawSword("katana_draw", 20);
+    public static final Action STEP_SLASH = new StepSlash("step_slash", 20);
+    public static final Action OVER_HEAD_SLASH = new OverHeadSlash("over_head_slash", 20);
 
     public static final ArrayList<Action> DEFAULT = new ArrayList<>();
     public static final ArrayList<Action> ACTIONS = new ArrayList<>();
 
     @Environment(EnvType.CLIENT)
-    public static void clientInit(){
-        register(null, DODGE, ModKeyBinds.DODGE_KEY, ModAnimations.DODGE);
-        DEFAULT.add(DODGE);
-        LongSword.DEFAULT.addAll(DEFAULT);
-        register(LongSword.DEFAULT, STEP_SLASH, ModKeyBinds.ATTACK, STEP_SLASH.ID, OVER_HEAD_SLASH);
-        register(LongSword.ACTIONS, OVER_HEAD_SLASH, ModKeyBinds.ATTACK, STEP_SLASH.ID);
-        register(LongSword.ACTIONS, DRAW_SWORD, null, STEP_SLASH.ID);
-        register(LongSword.ACTIONS, UNLOAD, null, STEP_SLASH.ID);
+    public static void clientInit() {
+        register(DEFAULT, DODGE, ModKeyBinds.DODGE_KEY);
+        LongSword.getInstance().getDefaultActions().addAll(DEFAULT);
+        register(LongSword.getInstance().getDefaultActions(), STEP_SLASH, ModKeyBinds.ATTACK);
+        register(LongSword.getInstance().getActions(), OVER_HEAD_SLASH, ModKeyBinds.ATTACK);
+        register(LongSword.getInstance().getActions(), DRAW_SWORD, null);
+        register(LongSword.getInstance().getActions(), UNLOAD, null);
     }
 
     public static void register() {
@@ -49,35 +47,33 @@ public class ModActions {
         return null;
     }
 
-    public static void register(@Nullable List<Action> actionList, Action action, @Nullable KeyBinding key, @Nullable Identifier actionAnim, Action... availableAction) {
+    public static void register(List<Action> actionList, Action action, @Nullable KeyBinding key, Action... availableAction) {
         KeyBinding[] k = {null, key};
         if (key == null) {
-            k = new KeyBinding[]{ModKeyBinds.EQUIP,ModKeyBinds.EQUIP};
+            k = new KeyBinding[]{ModKeyBinds.EQUIP, ModKeyBinds.EQUIP};
         }
         action.setActionKey(k);
-        action.setActionAnim(Objects.requireNonNullElseGet(actionAnim, () -> action.ID));
         action.setAvailableAction(availableAction);
         ACTIONS.add(action);
-        if (actionList != null) {
-            actionList.add(action);
-        }
+        actionList.add(action);
     }
 
-    public static void register(@Nullable List<Action> actionList,Action action, KeyBinding lastKey, KeyBinding key, @Nullable Identifier actionAnim, Action... availableAction) {
+    public static void register(List<Action> actionList, Action action, KeyBinding lastKey, KeyBinding key, Action... availableAction) {
         KeyBinding[] k = {lastKey, key};
         action.setActionKey(k);
-        action.setActionAnim(Objects.requireNonNullElseGet(actionAnim, () -> action.ID));
         action.setAvailableAction(availableAction);
         ACTIONS.add(action);
-        if (actionList != null) {
-            actionList.add(action);
-        }
+        actionList.add(action);
     }
 
     public static class LongSword implements WeaponActions {
-        public static final LongSword INSTANCE = new LongSword();
-        private static final List<Action> DEFAULT = new ArrayList<>();
-        private static final List<Action> ACTIONS = new ArrayList<>();
+        private static final LongSword INSTANCE = new LongSword();
+        private final List<Action> DEFAULT = new ArrayList<>();
+        private final List<Action> ACTIONS = new ArrayList<>();
+
+        public static LongSword getInstance() {
+            return INSTANCE;
+        }
 
         @Override
         public List<Action> getDefaultActions() {
@@ -87,6 +83,9 @@ public class ModActions {
         @Override
         public List<Action> getActions() {
             return ACTIONS;
+        }
+
+        private LongSword() {
         }
     }
 }

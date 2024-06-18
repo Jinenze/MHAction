@@ -5,7 +5,7 @@ import com.jez.mha.config.ServerConfigWrapper;
 import com.jez.mha.init.ModActions;
 import com.jez.mha.init.ModEntities;
 import com.jez.mha.init.ModItems;
-import com.jez.mha.init.ModSound;
+import com.jez.mha.init.ModSounds;
 import com.jez.mha.item.IMhaSword;
 import com.jez.mha.network.ServerNetwork;
 import me.shedaniel.autoconfig.AutoConfig;
@@ -38,7 +38,7 @@ public class MHAction implements ModInitializer {
         config = AutoConfig.getConfigHolder(ServerConfigWrapper.class).getConfig().server;
         ServerNetwork.register();
         ModActions.register();
-        ModSound.register();
+        ModSounds.register();
         ModEntities.register();
         ModItems.register();
     }

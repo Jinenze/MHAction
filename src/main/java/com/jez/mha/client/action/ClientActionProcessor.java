@@ -12,9 +12,7 @@ import com.jez.mha.item.IMhaSword;
 import com.jez.mha.network.ClientNetwork;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonConfiguration;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonMode;
-import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
-import dev.kosmx.playerAnim.api.layered.ModifierLayer;
 import dev.kosmx.playerAnim.api.layered.modifier.AbstractFadeModifier;
 import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
 import net.fabricmc.api.EnvType;
@@ -124,8 +122,7 @@ public class ClientActionProcessor implements ClientProcessor {
 
     public void playMainAnim(KeyframeAnimation animation, int length) {
         var animationPlayer = new KeyframeAnimationPlayer(animation).setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL).setFirstPersonConfiguration(new FirstPersonConfiguration());
-        var mainAnim = ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(ModAnimations.mainAnim));
-        mainAnim.replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(length, (modelName, type, value) -> value), animationPlayer, runningAction != null);
+        ModAnimations.mainAnim.replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(length, (modelName, type, value) -> value), animationPlayer);
     }
 
     public boolean isMainActionRunning() {
@@ -153,13 +150,11 @@ public class ClientActionProcessor implements ClientProcessor {
 
     public void playSubAnim(KeyframeAnimation animation) {
         var animationPlayer = new KeyframeAnimationPlayer(animation).setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL).setFirstPersonConfiguration(new FirstPersonConfiguration());
-        var subAnim = ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(ModAnimations.subAnim));
-        subAnim.setAnimation(animationPlayer);
+        ModAnimations.subAnim.setAnimation(animationPlayer);
     }
 
     public void stopSubAnim() {
-        var subAnim = ((ModifierLayer<IAnimation>) ModAnimations.playerAssociatedAnimationData.get(ModAnimations.subAnim));
-        subAnim.setAnimation(null);
+        ModAnimations.subAnim.setAnimation(null);
     }
 
     public void setProcessorActions(WeaponActions weaponActions) {

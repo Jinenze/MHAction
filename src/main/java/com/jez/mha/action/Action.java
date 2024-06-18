@@ -20,8 +20,6 @@ public abstract class Action {
     @Environment(EnvType.CLIENT)
     private KeyBinding[] actionKey;
     @Environment(EnvType.CLIENT)
-    private Identifier actionAnim;
-    @Environment(EnvType.CLIENT)
     private Action[] availableAction;
 
     public Action(String ID, int length) {
@@ -77,12 +75,7 @@ public abstract class Action {
 
     @Environment(EnvType.CLIENT)
     public KeyframeAnimation getActionAnim() {
-        return PlayerAnimationRegistry.getAnimation(actionAnim);
-    }
-
-    @Environment(EnvType.CLIENT)
-    public void setActionAnim(Identifier actionAnim) {
-        this.actionAnim = actionAnim;
+        return PlayerAnimationRegistry.getAnimation(ID);
     }
 
     public int getLength() {

@@ -1,5 +1,6 @@
 package com.jez.mha.client;
 
+import com.jez.mha.MHAction;
 import com.jez.mha.client.action.ClientActionProcessor;
 import com.jez.mha.client.action.impl.ClientProcessor;
 import com.jez.mha.client.action.impl.DummyClientProcessor;
@@ -19,7 +20,10 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.minecraft.client.util.ModelIdentifier;
+import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public class ModClient implements ClientModInitializer {
@@ -52,5 +56,6 @@ public class ModClient implements ClientModInitializer {
         ClientNetwork.register();
         ModKeyBinds.register();
         ModUi.init();
+        ModelLoadingPlugin.register(ctx -> ctx.addModels(new ModelIdentifier(new Identifier(MHAction.MODID, "katanaa"), "inventory"), new ModelIdentifier(new Identifier(MHAction.MODID, "katana"), "inventory")));
     }
 }

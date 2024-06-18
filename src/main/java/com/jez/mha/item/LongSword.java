@@ -5,7 +5,7 @@ import com.jez.mha.client.ModClient;
 import com.jez.mha.init.ModActions;
 import com.jez.mha.init.ModAnimations;
 import com.jez.mha.init.ModKeyBinds;
-import com.jez.mha.init.ModSound;
+import com.jez.mha.init.ModSounds;
 import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import net.fabricmc.api.EnvType;
@@ -29,11 +29,11 @@ public class LongSword extends ModSwordItem {
             if (ModKeyBinds.ATTACK.isPressed() && player.isOnGround()) {
                 if (player.input.getMovementInput().equals(Vec2f.ZERO)) {
                     ModClient.processor.runAction(ModActions.DRAW_SWORD);
-//                ModClient.processor.playSubAnim(getSubAnim());
+                    ModClient.processor.playSubAnim(getSubAnim());
                     ModClient.processor.setReady(true);
                 } else {
                     ModClient.processor.runAction(ModActions.STEP_SLASH);
-//                ModClient.processor.playSubAnim(getSubAnim());
+                    ModClient.processor.playSubAnim(getSubAnim());
                     ModClient.processor.setReady(true);
                 }
             }
@@ -52,17 +52,17 @@ public class LongSword extends ModSwordItem {
 
     @Override
     public SoundEvent getAttackSound() {
-        return ModSound.DODGE.START.soundEvent;
+        return ModSounds.DODGE.START.soundEvent;
     }
 
     @Override
     public KeyframeAnimation getSubAnim() {
-        return PlayerAnimationRegistry.getAnimation(ModAnimations.katana_sub);
+        return PlayerAnimationRegistry.getAnimation(ModAnimations.katanaSub);
     }
 
     @Override
     public WeaponActions getWeaponActions() {
-        return ModActions.LongSword.INSTANCE;
+        return ModActions.LongSword.getInstance();
     }
 
     public LongSword(Settings settings) {
