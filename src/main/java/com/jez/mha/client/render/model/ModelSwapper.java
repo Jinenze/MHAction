@@ -1,6 +1,5 @@
-package com.jez.mha.client.render;
+package com.jez.mha.client.render.model;
 
-import com.jez.mha.client.render.impl.ModBakedModel;
 import com.jez.mha.init.ModItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

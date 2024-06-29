@@ -4,7 +4,7 @@ import com.jez.mha.MHAction;
 import com.jez.mha.client.action.ClientActionProcessor;
 import com.jez.mha.client.action.impl.ClientProcessor;
 import com.jez.mha.client.action.impl.DummyClientProcessor;
-import com.jez.mha.client.render.ModelSwapper;
+import com.jez.mha.client.render.model.ModelSwapper;
 import com.jez.mha.config.ClientConfig;
 import com.jez.mha.config.ClientConfigWrapper;
 import com.jez.mha.init.ModAnimations;
@@ -55,7 +55,7 @@ public class ModClient implements ClientModInitializer {
         PlayerAnimationAccess.REGISTER_ANIMATION_EVENT.register(ModAnimations::register);
         ClientNetwork.register();
         ModKeyBinds.register();
-        ModUi.init();
+        ModUi.register();
         ModelLoadingPlugin.register(ctx -> ctx.addModels(new ModelIdentifier(new Identifier(MHAction.MODID, "katanaa"), "inventory"), new ModelIdentifier(new Identifier(MHAction.MODID, "katana"), "inventory")));
     }
 }

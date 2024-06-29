@@ -1,4 +1,4 @@
-package com.jez.mha.client.render.impl;
+package com.jez.mha.client.render.model;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

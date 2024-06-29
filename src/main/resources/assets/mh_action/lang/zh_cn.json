@@ -3,6 +3,8 @@
   "key.mh_action.switch": "开关",
   "key.mh_action.dodge": "翻滚",
 
+  "screen.mh_action.render_setting.title": "渲染设置",
+
   "item.mh_action.long_sword": "刀",
   "item.mh_action.katana": "刀",
 

@@ -3,6 +3,7 @@ package com.jez.mha.action.longsword;
 import com.jez.mha.action.Action;
 import com.jez.mha.action.AttackAction;
 import com.jez.mha.client.ModClient;
+import com.jez.mha.state.MHAPlayerGetter;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -35,8 +36,7 @@ public class StepSlash extends Action implements AttackAction {
     @Environment(EnvType.CLIENT)
     @Override
     public void hit(ClientPlayerEntity player) {
-        PlayerGauge playerGauge = (PlayerGauge) player;
-        playerGauge.setSpiritGauge(playerGauge.getSpiritGauge() + 10);
+        ((MHAPlayerGetter) player).getSpiritGauge().addCount(100);
     }
 
     public StepSlash(String ID, int length) {

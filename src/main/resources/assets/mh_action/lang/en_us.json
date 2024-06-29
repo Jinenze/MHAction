@@ -3,6 +3,8 @@
   "key.mh_action.switch": "switch",
   "key.mh_action.dodge": "dodge",
 
+  "screen.mh_action.render_setting.title": "Render setting",
+
   "item.mh_action.long_sword": "sword",
   "item.mh_action.katana": "sword",
 

@@ -1,8 +1,8 @@
-package com.jez.mha.client.render;
+package com.jez.mha.client.render.item;
 
 import com.jez.mha.MHAction;
 import com.jez.mha.client.ModClient;
-import com.jez.mha.client.render.impl.ModBakedModel;
+import com.jez.mha.client.render.model.ModBakedModel;
 import com.jez.mha.mixin.ItemRendererInvoker;
 import dev.kosmx.playerAnim.api.TransformType;
 import dev.kosmx.playerAnim.core.util.Vec3f;

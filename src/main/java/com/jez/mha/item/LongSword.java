@@ -6,12 +6,14 @@ import com.jez.mha.init.ModActions;
 import com.jez.mha.init.ModAnimations;
 import com.jez.mha.init.ModKeyBinds;
 import com.jez.mha.init.ModSounds;
+import com.jez.mha.state.item.SharpnessState;
 import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.Vec2f;
 
@@ -38,6 +40,11 @@ public class LongSword extends ModSwordItem {
                 }
             }
         }
+    }
+
+    @Override
+    public ItemStack getDefaultStack() {
+        return SharpnessState.initStack(new ItemStack(this));
     }
 
     @Override

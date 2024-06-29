@@ -1,12 +1,14 @@
 package com.jez.mha.init;
 
 import com.jez.mha.MHAction;
-import com.jez.mha.client.render.LongSwordRender;
+import com.jez.mha.client.render.item.LongSwordRender;
 import com.jez.mha.item.LongSword;
+import com.jez.mha.state.MHAPlayerItemList;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -25,6 +27,7 @@ public class ModItems {
             content.add(longSword);
         });
         BuiltinItemRendererRegistry.INSTANCE.register(longSword, new LongSwordRender());
+        MHAPlayerItemList.addAvailableItem(Items.POTION);
     }
 
     public static void forEach(Consumer<Identifier> consumer) {

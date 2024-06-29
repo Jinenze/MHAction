@@ -1,51 +1,28 @@
 package com.jez.mha.init;
 
-public class ModUi {
-//    private static final Identifier ROTARY_MENU_BACKGROUND = new Identifier("mh_action", "hud/icon.png");
-//    private static final Identifier ITEM_DAMAGE_BAR_BACKGROUND = new Identifier("mh_action", "hud/icon.png");
+import com.jez.mha.client.ModClient;
+import com.jez.mha.state.MHAPlayerGetter;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.network.ClientPlayerEntity;
 
-    public static void init() {
-//        itemRotaryMenuRender();
-//        itemDamageBarRender();
+@Environment(EnvType.CLIENT)
+public class ModUi {
+    public static void register() {
+        HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
+            if (ModClient.processor.isEquipped()) {
+                renderAllHud(drawContext, tickDelta, MinecraftClient.getInstance().player);
+            }
+        });
     }
 
-//    private static void itemRotaryMenuRender() {
-//        HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
-//            MatrixStack stack = drawContext.getMatrices();
-//            Matrix4f positionMatrix = stack.peek().getPositionMatrix();
-//            int scaledWidth = drawContext.getScaledWindowWidth();
-//            int scaledHeight = drawContext.getScaledWindowHeight();
-//            Tessellator tessellator = Tessellator.getInstance();
-//            BufferBuilder buffer = tessellator.getBuffer();
-//            buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-//            buffer.vertex(positionMatrix, scaledWidth - 60, scaledHeight - 60, 0).texture(0f, 0f).next();
-//            buffer.vertex(positionMatrix, scaledWidth - 60, scaledHeight - 20, 0).texture(0f, 1f).next();
-//            buffer.vertex(positionMatrix, scaledWidth - 20, scaledHeight - 20, 0).texture(1f, 1f).next();
-//            buffer.vertex(positionMatrix, scaledWidth - 20, scaledHeight - 60, 0).texture(1f, 0f).next();
-//            RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-//            RenderSystem.setShaderTexture(0, ModUi.ROTARY_MENU_BACKGROUND);
-////            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-//            tessellator.draw();
-//        });
-//    }
-//
-//    private static void itemDamageBarRender() {
-//        HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
-//            MatrixStack stack = drawContext.getMatrices();
-//            Matrix4f positionMatrix = stack.peek().getPositionMatrix();
-//            int scaledWidth = drawContext.getScaledWindowWidth();
-//            int scaledHeight = drawContext.getScaledWindowHeight();
-//            Tessellator tessellator = Tessellator.getInstance();
-//            BufferBuilder buffer = tessellator.getBuffer();
-//            buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-//            buffer.vertex(positionMatrix, scaledWidth - 60, scaledHeight - 60, 0).texture(0f, 0f).next();
-//            buffer.vertex(positionMatrix, scaledWidth - 60, scaledHeight - 20, 0).texture(0f, 1f).next();
-//            buffer.vertex(positionMatrix, scaledWidth - 20, scaledHeight - 20, 0).texture(1f, 1f).next();
-//            buffer.vertex(positionMatrix, scaledWidth - 20, scaledHeight - 60, 0).texture(1f, 0f).next();
-//            RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-//            RenderSystem.setShaderTexture(0, ModUi.ITEM_DAMAGE_BAR_BACKGROUND);
-////            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-//            tessellator.draw();
-//        });
-//    }
+    public static void renderAllHud(DrawContext drawContext, float tickDelta, ClientPlayerEntity player) {
+        MHAPlayerGetter playerGetter = (MHAPlayerGetter) player;
+        playerGetter.getSpiritGauge().getHudRender().onHudRender(drawContext, tickDelta);
+//        SharpnessState.SharpnessHud.onHudRender(drawContext, tickDelta);
+        playerGetter.getMHAPlayerItemList().getHudRender().onHudRender(drawContext, tickDelta);
+    }
 }
